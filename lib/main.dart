@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'message_wedget.dart';
+import 'homepage.dart';
 
 void main() {
   runApp(const MyApp());
@@ -10,38 +10,13 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const MaterialApp(
-      title: 'Chat App',
-      home: ChatScreen(),
+    return MaterialApp(
+      title: "Random Users",
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(primarySwatch: Colors.grey),
+      home: const HomePage(),
     );
   }
 }
 
-class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).canvasColor,
-        elevation: .6,
-        title: const Text(
-          'message',
-          style: TextStyle(color: Colors.black87),
-        ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.forum),
-            color: Colors.black87,
-          ),
-        ],
-        centerTitle: true,
-      ),
-      body: const SafeArea(
-        child: MessageWedget(),
-      ),
-    );
-  }
-}
