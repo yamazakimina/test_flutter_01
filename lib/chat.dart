@@ -110,6 +110,9 @@ class Chat extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(color: Colors.grey.shade200),
                 child: TextField(
+                  keyboardType: TextInputType.multiline, //複数行のテキスト入力
+                  maxLines: 5,
+                  minLines: 1,
                   autofocus: true,
                   decoration: InputDecoration(
                     border: InputBorder.none,
@@ -121,11 +124,27 @@ class Chat extends StatelessWidget {
               ),
             ),
           ),
-          IconButton(
-            icon: Icon(Icons.mic),
-            iconSize: 28,
-            color: Colors.black54,
-            onPressed: () {},
+          // IconButton(
+          //   icon: Icon(Icons.mic),
+          //   iconSize: 28,
+          //   color: Colors.black54,
+          //   onPressed: () {},
+          // ),
+          Center(
+            child: Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: Ink(
+                decoration: const ShapeDecoration(
+                  color: Colors.blue,
+                  shape: CircleBorder(),
+                ),
+                child: IconButton(
+                  icon: Icon(Icons.send),
+                  color: Colors.white,
+                  onPressed: () {},
+                ),
+              ),
+            ),
           ),
         ],
       ),
