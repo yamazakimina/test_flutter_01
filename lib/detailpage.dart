@@ -43,207 +43,232 @@ class _DetailsPageState extends State<DetailsPage> {
         ),
         centerTitle: true,
       ),
-      body: Container(
-        // margin: const EdgeInsets.only(top: kToolbarHeight - 32),
-        color: Colors.white,
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: <Widget>[
-            SizedBox(
-              height: MediaQuery.of(context).size.height * 0.6,
-              child: Stack(
-                fit: StackFit.expand,
-                children: <Widget>[
-                  Card(
-                    shadowColor: Colors.grey,
-                    elevation: 16.0,
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(12.0),
-                    ),
-                    color: Colors.white,
-                    child: Padding(
-                      padding: const EdgeInsets.all(0),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(12.0),
-                        child: Image.network(
-                          widget.avatar,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(4.0),
-                    decoration: const BoxDecoration(
-                        borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                        color: Colors.black12),
-                  ),
-                ],
-              ),
-            ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
-              child: SizedBox(
-                height: 120,
-                child: Card(
-                  color: Colors.white,
-                  shadowColor: Colors.grey,
-                  elevation: 8.0,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12.0),
-                  ),
-                  child: Column(
+      body: Stack(children: [
+        SingleChildScrollView(
+          child: Container(
+            // margin: const EdgeInsets.only(top: kToolbarHeight - 32),
+            color: Colors.white,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: <Widget>[
+                SizedBox(
+                  height: MediaQuery.of(context).size.height * 0.6,
+                  child: Stack(
+                    fit: StackFit.expand,
                     children: <Widget>[
-                      Container(
-                        margin: const EdgeInsets.all(16),
-                        child: Row(
-                          children: <Widget>[
-                            const Icon(
-                              Icons.search, // 検索アイコン
-                              color: Colors.black54,
-                            ),
-                            const SizedBox(width: 8),
-                            const Text('求めるものは',
-                                style: TextStyle(
-                                  color: Colors.black54,
-                                  fontSize: 14.0,
-                                  fontWeight: FontWeight.bold,
-                                ),
-                                maxLines: 2,
-                                textAlign: TextAlign.justify,
-                                overflow: TextOverflow.fade),
-                          ],
+                      Card(
+                        shadowColor: Colors.grey,
+                        elevation: 16.0,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12.0),
                         ),
-                        alignment: Alignment.centerLeft,
-                      ),
-                      Row(
-                        crossAxisAlignment: CrossAxisAlignment.center,
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          Container(
-                            margin: const EdgeInsets.fromLTRB(16, 0, 0, 0),
-                            child: Row(
-                              children: <Widget>[
-                                const Icon(
-                                  Icons.local_drink,
-                                  color: Colors.deepPurple,
-                                ),
-                                const SizedBox(width: 8), // アイコンとテキストの間にスペースを追加
-                                Text(
-                                  '飲み友達が欲しい',
-                                  style: const TextStyle(
-                                    color: Colors.black54,
-                                    fontSize: 20.0,
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                  textAlign: TextAlign.center,
-                                ),
-                              ],
+                        color: Colors.white,
+                        child: Padding(
+                          padding: const EdgeInsets.all(0),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(12.0),
+                            child: Image.network(
+                              widget.avatar,
+                              fit: BoxFit.cover,
                             ),
                           ),
-                        ],
-                      )
+                        ),
+                      ),
+                      Container(
+                        margin: const EdgeInsets.all(4.0),
+                        decoration: const BoxDecoration(
+                            borderRadius:
+                                BorderRadius.all(Radius.circular(12.0)),
+                            color: Colors.black12),
+                      ),
                     ],
+                  ),
+                ),
+                contentsDetails(),
+                contentsDetails(),
+                contentsDetails(),
+              ],
+            ),
+          ),
+        ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 16,
+          child: buttonLikes(),
+        ),
+      ]),
+    );
+  }
+}
+
+class buttonLikes extends StatelessWidget {
+  const buttonLikes({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(blurRadius: 10, color: Colors.black, spreadRadius: 1)
+              ],
+            ),
+            child: CircleAvatar(
+              radius: 36,
+              backgroundColor: Colors.white,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.close,
+                  color: Colors.red,
+                  size: 36,
+                ),
+                onPressed: () {
+                  // _matchEngine!.currentItem?.nope();
+                },
+                // child: const Text("Nope"),
+              ),
+            ),
+          ),
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(blurRadius: 10, color: Colors.black, spreadRadius: 1)
+              ],
+            ),
+            child: CircleAvatar(
+              radius: 32.0,
+              backgroundColor: Colors.white,
+              child: CircleAvatar(
+                radius: 32.0,
+                backgroundColor: Colors.white,
+                child: Center(
+                  child: IconButton(
+                    icon: const Icon(
+                      Icons.star,
+                      color: Colors.blue,
+                      size: 32.0,
+                    ),
+                    onPressed: () {
+                      // _matchEngine!.currentItem?.superLike();
+                    },
+                    //child: const Text("Superlike"),
                   ),
                 ),
               ),
             ),
-            Padding(
-              padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: 10,
-                            color: Colors.black,
-                            spreadRadius: 1)
-                      ],
-                    ),
-                    child: CircleAvatar(
-                      radius: 36,
-                      backgroundColor: Colors.white,
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.close,
-                          color: Colors.red,
-                          size: 36,
-                        ),
-                        onPressed: () {
-                          // _matchEngine!.currentItem?.nope();
-                        },
-                        // child: const Text("Nope"),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: 10,
-                            color: Colors.black,
-                            spreadRadius: 1)
-                      ],
-                    ),
-                    child: CircleAvatar(
-                      radius: 32.0,
-                      backgroundColor: Colors.white,
-                      child: CircleAvatar(
-                        radius: 32.0,
-                        backgroundColor: Colors.white,
-                        child: Center(
-                          child: IconButton(
-                            icon: const Icon(
-                              Icons.star,
-                              color: Colors.blue,
-                              size: 32.0,
-                            ),
-                            onPressed: () {
-                              // _matchEngine!.currentItem?.superLike();
-                            },
-                            //child: const Text("Superlike"),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                  Container(
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      shape: BoxShape.circle,
-                      boxShadow: [
-                        BoxShadow(
-                            blurRadius: 10,
-                            color: Colors.black,
-                            spreadRadius: 1)
-                      ],
-                    ),
-                    child: CircleAvatar(
-                      radius: 36,
-                      backgroundColor: Colors.white,
-                      child: IconButton(
-                        icon: const Icon(
-                          Icons.favorite,
-                          color: Colors.green,
-                          size: 36,
-                        ),
-                        onPressed: () {
-                          // _matchEngine!.currentItem?.like();
-                        },
-                        //  child: const Text("Like"),
-                      ),
-                    ),
-                  )
-                ],
+          ),
+          Container(
+            decoration: const BoxDecoration(
+              color: Colors.white,
+              shape: BoxShape.circle,
+              boxShadow: [
+                BoxShadow(blurRadius: 10, color: Colors.black, spreadRadius: 1)
+              ],
+            ),
+            child: CircleAvatar(
+              radius: 36,
+              backgroundColor: Colors.white,
+              child: IconButton(
+                icon: const Icon(
+                  Icons.favorite,
+                  color: Colors.green,
+                  size: 36,
+                ),
+                onPressed: () {
+                  // _matchEngine!.currentItem?.like();
+                },
+                //  child: const Text("Like"),
               ),
             ),
-          ],
+          )
+        ],
+      ),
+    );
+  }
+}
+
+class contentsDetails extends StatelessWidget {
+  const contentsDetails({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(0, 0, 0, 0),
+      child: SizedBox(
+        height: 120,
+        child: Card(
+          color: Colors.white,
+          shadowColor: Colors.grey,
+          elevation: 8.0,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(12.0),
+          ),
+          child: Column(
+            children: <Widget>[
+              Container(
+                margin: const EdgeInsets.all(16),
+                child: Row(
+                  children: <Widget>[
+                    const Icon(
+                      Icons.search, // 検索アイコン
+                      color: Colors.black54,
+                    ),
+                    const SizedBox(width: 8),
+                    const Text('求めるものは',
+                        style: TextStyle(
+                          color: Colors.black54,
+                          fontSize: 14.0,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        maxLines: 2,
+                        textAlign: TextAlign.justify,
+                        overflow: TextOverflow.fade),
+                  ],
+                ),
+                alignment: Alignment.centerLeft,
+              ),
+              Row(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: <Widget>[
+                  Container(
+                    margin: const EdgeInsets.fromLTRB(16, 0, 0, 0),
+                    child: Row(
+                      children: <Widget>[
+                        const Icon(
+                          Icons.local_drink,
+                          color: Colors.deepPurple,
+                        ),
+                        const SizedBox(width: 8), // アイコンとテキストの間にスペースを追加
+                        Text(
+                          '飲み友達が欲しい',
+                          style: const TextStyle(
+                            color: Colors.black54,
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                          textAlign: TextAlign.center,
+                        ),
+                      ],
+                    ),
+                  ),
+                ],
+              )
+            ],
+          ),
         ),
       ),
     );
