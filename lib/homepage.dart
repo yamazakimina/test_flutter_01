@@ -294,11 +294,11 @@ class _HomePageState extends State<HomePage> {
                                           child: Container(
                                             width: 30.0, // ボタンの幅を設定
                                             height: 30.0, // ボタンの高さを設定
-                                            decoration: BoxDecoration(
-                                              shape:
-                                                  BoxShape.circle, // 円形の形状を指定
-                                              color: Colors.grey, // 背景色を指定
-                                            ),
+                                            // decoration: BoxDecoration(
+                                            //   shape:
+                                            //       BoxShape.circle, // 円形の形状を指定
+                                            //   color: Colors.grey, // 背景色を指定
+                                            // ),
                                             child: Center(
                                               child: Icon(
                                                 Icons.arrow_upward,
@@ -312,6 +312,7 @@ class _HomePageState extends State<HomePage> {
                                             shape: CircleBorder(), // ボタンを円形にする
                                             elevation: 8,
                                             shadowColor: Colors.black,
+                                            backgroundColor: Colors.grey,
                                           ),
                                         ),
                                       ),
