@@ -93,7 +93,7 @@ class ChatScreen extends StatelessWidget {
               ),
             ),
           ),
-          // const SizedBox(height: 8),
+          const SizedBox(height: 8),
           Expanded(
             child: SafeArea(
               child: MessageWedget(),
@@ -123,7 +123,7 @@ class MessageWedget extends StatelessWidget {
               }));
             },
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+                const EdgeInsets.symmetric(horizontal: 32, vertical: 4),
             leading: ClipOval(
               child: Image.asset(
                 'assets/img/1.jpg',
@@ -137,7 +137,7 @@ class MessageWedget extends StatelessWidget {
             subtitle: const Text('sample'),
           ),
           ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+            contentPadding: EdgeInsets.symmetric(horizontal: 32, vertical: 4),
             leading: ClipOval(
               child: Image.asset(
                 'assets/img/1.jpg',
@@ -151,7 +151,7 @@ class MessageWedget extends StatelessWidget {
             subtitle: Text('sample'),
           ),
           ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+            contentPadding: EdgeInsets.symmetric(horizontal: 32, vertical: 4),
             leading: ClipOval(
               child: Image.asset(
                 'assets/img/1.jpg',
@@ -165,7 +165,7 @@ class MessageWedget extends StatelessWidget {
             subtitle: Text('sample'),
           ),
           ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+            contentPadding: EdgeInsets.symmetric(horizontal: 32, vertical: 4),
             leading: ClipOval(
               child: Image.asset(
                 'assets/img/1.jpg',
@@ -179,7 +179,7 @@ class MessageWedget extends StatelessWidget {
             subtitle: Text('sample'),
           ),
           ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 32, vertical: 8),
+            contentPadding: EdgeInsets.symmetric(horizontal: 32, vertical: 4),
             leading: ClipOval(
               child: Image.asset(
                 'assets/img/1.jpg',
