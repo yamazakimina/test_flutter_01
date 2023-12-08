@@ -6,7 +6,41 @@ class Chat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        backgroundColor: Theme.of(context).canvasColor,
+        elevation: .6,
+        toolbarHeight: 80, // AppBarの高さを調整
+        title: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            ClipOval(
+              child: Image.asset(
+                'assets/img/1.jpg',
+                width: 50,
+                height: 50,
+                fit: BoxFit.cover,
+              ),
+            ),
+            const SizedBox(height: 4),
+            const Text(
+              'test',
+              style: TextStyle(
+                fontSize: 16.0,
+                color: Colors.grey,
+              ),
+            ),
+          ],
+        ),
+        actions: <Widget>[
+          IconButton(
+            onPressed: () {},
+            icon: const Icon(Icons.video_call),
+            color: Colors.grey,
+            iconSize: 36,
+          ),
+        ],
+        centerTitle: true,
+      ),
       body: SafeArea(
         child: Column(
           children: <Widget>[
@@ -25,7 +59,6 @@ class Chat extends StatelessWidget {
                 ),
               ),
             ),
-            // 修正: TextInputWidgetを呼び出す
             TextInputWidget(),
           ],
         ),
@@ -80,6 +113,9 @@ class Chat extends StatelessWidget {
                   autofocus: true,
                   decoration: InputDecoration(
                     border: InputBorder.none,
+                    hintText: 'メッセージを入力',
+                    hintStyle:
+                        TextStyle(color: Colors.grey), // テキストを薄く表示させるスタイル
                   ),
                 ),
               ),
