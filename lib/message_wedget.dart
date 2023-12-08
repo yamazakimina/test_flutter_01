@@ -2,7 +2,7 @@ import 'chat.dart';
 import 'package:flutter/material.dart';
 
 class ChatScreen extends StatelessWidget {
-  const ChatScreen({super.key});
+  const ChatScreen({Key? key});
 
   @override
   Widget build(BuildContext context) {
@@ -21,9 +21,10 @@ class ChatScreen extends StatelessWidget {
             const Text(
               'blur',
               style: TextStyle(
-                  fontSize: 30.0,
-                  color: Colors.purple,
-                  fontWeight: FontWeight.bold),
+                fontSize: 30.0,
+                color: Colors.purple,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -31,13 +32,74 @@ class ChatScreen extends StatelessWidget {
           IconButton(
             onPressed: () {},
             icon: const Icon(Icons.forum),
-            color: Colors.black87,
+            color: Colors.grey,
           ),
         ],
         centerTitle: true,
       ),
-      body: const SafeArea(
-        child: MessageWedget(),
+      body: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: const Text(
+              '新しいマッチ',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          // const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 0),
+            child: Padding(
+              padding: const EdgeInsets.all(16.0),
+              child: Row(
+                children: [
+                  Image.asset(
+                    'assets/img/1.jpg',
+                    width: 100, // 適切なサイズに調整
+                    height: 100, // 適切なサイズに調整
+                    fit: BoxFit.cover,
+                  ),
+                  const SizedBox(width: 8),
+                  Image.asset(
+                    'assets/img/1.jpg',
+                    width: 100, // 適切なサイズに調整
+                    height: 100, // 適切なサイズに調整
+                    fit: BoxFit.cover,
+                  ),
+                  const SizedBox(width: 8),
+                  Image.asset(
+                    'assets/img/1.jpg',
+                    width: 100, // 適切なサイズに調整
+                    height: 100, // 適切なサイズに調整
+                    fit: BoxFit.cover,
+                  ),
+                ],
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 16.0),
+            child: const Text(
+              'メッセージ',
+              style: TextStyle(
+                fontSize: 18.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+          ),
+          // const SizedBox(height: 8),
+          Expanded(
+            child: SafeArea(
+              child: MessageWedget(),
+            ),
+          ),
+        ],
       ),
     );
   }
