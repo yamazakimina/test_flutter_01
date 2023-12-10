@@ -42,27 +42,22 @@ class Chat extends StatelessWidget {
         centerTitle: true,
       ),
       body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 32,
-                ),
-                child: Column(
-                  children: <Widget>[
-                    rightBalloon(),
-                    leftBalloon(),
-                    rightBalloon(),
-                  ],
-                ),
-              ),
-            ),
-            TextInputWidget(),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              SizedBox(height: 16),
+              rightBalloon(),
+              leftBalloon(),
+              rightBalloon(),
+              leftBalloon(),
+              rightBalloon(),
+              leftBalloon(),
+              rightBalloon(),
+            ],
+          ),
         ),
       ),
+      bottomNavigationBar: TextInputWidget(),
     );
   }
 

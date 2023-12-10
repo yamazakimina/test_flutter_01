@@ -58,26 +58,9 @@ class ChatScreen extends StatelessWidget {
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 children: [
-                  Image.asset(
-                    'assets/img/1.jpg',
-                    width: 100, // 適切なサイズに調整
-                    height: 100, // 適切なサイズに調整
-                    fit: BoxFit.cover,
-                  ),
-                  const SizedBox(width: 8),
-                  Image.asset(
-                    'assets/img/1.jpg',
-                    width: 100, // 適切なサイズに調整
-                    height: 100, // 適切なサイズに調整
-                    fit: BoxFit.cover,
-                  ),
-                  const SizedBox(width: 8),
-                  Image.asset(
-                    'assets/img/1.jpg',
-                    width: 100, // 適切なサイズに調整
-                    height: 100, // 適切なサイズに調整
-                    fit: BoxFit.cover,
-                  ),
+                  imagesMatch(),
+                  imagesMatch(),
+                  imagesMatch(),
                 ],
               ),
             ),
@@ -101,6 +84,29 @@ class ChatScreen extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class imagesMatch extends StatelessWidget {
+  const imagesMatch({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Image.asset(
+          'assets/img/1.jpg',
+          width: 100, // 適切なサイズに調整
+          height: 100, // 適切なサイズに調整
+          fit: BoxFit.cover,
+        ),
+        SizedBox(
+          width: 10,
+        ),
+      ],
     );
   }
 }

@@ -45,51 +45,7 @@ class _DetailsPageState extends State<DetailsPage> {
       ),
       body: Stack(children: [
         SingleChildScrollView(
-          child: Container(
-            // margin: const EdgeInsets.only(top: kToolbarHeight - 32),
-            color: Colors.white,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: <Widget>[
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.6,
-                  child: Stack(
-                    fit: StackFit.expand,
-                    children: <Widget>[
-                      Card(
-                        shadowColor: Colors.grey,
-                        elevation: 16.0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12.0),
-                        ),
-                        color: Colors.white,
-                        child: Padding(
-                          padding: const EdgeInsets.all(0),
-                          child: ClipRRect(
-                            borderRadius: BorderRadius.circular(12.0),
-                            child: Image.network(
-                              widget.avatar,
-                              fit: BoxFit.cover,
-                            ),
-                          ),
-                        ),
-                      ),
-                      Container(
-                        margin: const EdgeInsets.all(4.0),
-                        decoration: const BoxDecoration(
-                            borderRadius:
-                                BorderRadius.all(Radius.circular(12.0)),
-                            color: Colors.black12),
-                      ),
-                    ],
-                  ),
-                ),
-                contentsDetails(),
-                contentsDetails(),
-                contentsDetails(),
-              ],
-            ),
-          ),
+          child: photoDetails(widget: widget),
         ),
         Positioned(
           left: 0,
@@ -98,6 +54,65 @@ class _DetailsPageState extends State<DetailsPage> {
           child: buttonLikes(),
         ),
       ]),
+    );
+  }
+}
+
+class photoDetails extends StatelessWidget {
+  const photoDetails({
+    super.key,
+    required this.widget,
+  });
+
+  final DetailsPage widget;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      // margin: const EdgeInsets.only(top: kToolbarHeight - 32),
+      color: Colors.white,
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        children: <Widget>[
+          SizedBox(
+            height: MediaQuery.of(context).size.height * 0.6,
+            child: Stack(
+              fit: StackFit.expand,
+              children: <Widget>[
+                Card(
+                  shadowColor: Colors.grey,
+                  elevation: 16.0,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(12.0),
+                  ),
+                  color: Colors.white,
+                  child: Padding(
+                    padding: const EdgeInsets.all(0),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(12.0),
+                      child: Image.network(
+                        widget.avatar,
+                        fit: BoxFit.cover,
+                      ),
+                    ),
+                  ),
+                ),
+                Container(
+                  margin: const EdgeInsets.all(4.0),
+                  decoration: const BoxDecoration(
+                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
+                      color: Colors.black12),
+                ),
+              ],
+            ),
+          ),
+          contentsDetails(),
+          contentsDetails(),
+          contentsDetails(),
+          contentsDetails(),
+          contentsDetails(),
+        ],
+      ),
     );
   }
 }
