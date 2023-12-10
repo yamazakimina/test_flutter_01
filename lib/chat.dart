@@ -6,58 +6,67 @@ class Chat extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).canvasColor,
-        elevation: .6,
-        toolbarHeight: 80, // AppBarの高さを調整
-        title: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            ClipOval(
-              child: Image.asset(
-                'assets/img/1.jpg',
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
+      appBar: appBar(context),
+      body: SafeArea(
+        child: Column(
+          children: <Widget>[
+            Expanded(
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16,
+                  vertical: 32,
+                ),
+                child: Column(
+                  children: <Widget>[
+                    rightBalloon(),
+                    leftBalloon(),
+                    rightBalloon(),
+                  ],
+                ),
               ),
             ),
-            const SizedBox(height: 4),
-            const Text(
-              'test',
-              style: TextStyle(
-                fontSize: 16.0,
-                color: Colors.grey,
-              ),
-            ),
+            TextInputWidget(),
           ],
         ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.video_call),
-            color: Colors.grey,
-            iconSize: 36,
+      ),
+    );
+  }
+
+  AppBar appBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Theme.of(context).canvasColor,
+      elevation: .6,
+      toolbarHeight: 80, // AppBarの高さを調整
+      title: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          ClipOval(
+            child: Image.asset(
+              'assets/img/1.jpg',
+              width: 50,
+              height: 50,
+              fit: BoxFit.cover,
+            ),
+          ),
+          const SizedBox(height: 4),
+          const Text(
+            'test',
+            style: TextStyle(
+              fontSize: 16.0,
+              color: Colors.grey,
+            ),
           ),
         ],
-        centerTitle: true,
       ),
-      body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: <Widget>[
-              SizedBox(height: 16),
-              rightBalloon(),
-              leftBalloon(),
-              rightBalloon(),
-              leftBalloon(),
-              rightBalloon(),
-              leftBalloon(),
-              rightBalloon(),
-            ],
-          ),
+      actions: <Widget>[
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.video_call),
+          color: Colors.grey,
+          iconSize: 36,
         ),
-      ),
-      bottomNavigationBar: TextInputWidget(),
+      ],
+      centerTitle: true,
     );
   }
 
