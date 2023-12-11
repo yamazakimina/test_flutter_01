@@ -94,7 +94,7 @@ class _PartnersFindState extends State<PartnersFind> {
                 children: <Widget>[
                   Center(
                     child: SizedBox(
-                      height: MediaQuery.of(context).size.height * 0.75,
+                      height: MediaQuery.of(context).size.height * 0.78,
                       child: SwipeCards(
                         matchEngine: _matchEngine!,
                         itemBuilder: (BuildContext context, int index) {
@@ -114,11 +114,13 @@ class _PartnersFindState extends State<PartnersFind> {
                       ),
                     ),
                   ),
-                  likedButton(),
+                  // likedButton(),
                 ],
               ),
       ),
       bottomNavigationBar: bottomNavigationBar(context),
+      floatingActionButton: likedButton(), // 追加
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
     );
   }
 
@@ -157,13 +159,27 @@ class _PartnersFindState extends State<PartnersFind> {
             // ),
             BottomNavigationBarItem(
               label: "Matches",
-              icon: Container(
-                child: Icon(
-                  Icons.favorite_border,
-                  color: Colors.grey,
-                ),
+              icon: Stack(
+                children: [
+                  Icon(
+                    Icons.favorite_border,
+                    color: Colors.grey,
+                  ),
+                  Positioned(
+                    top: 0,
+                    right: 0,
+                    child: badges.Badge(
+                      animationDuration: Duration(milliseconds: 300),
+                      badgeContent:
+                          Text('3', style: TextStyle(color: Colors.white)),
+                      child: Container(), // Badgeがない時にも空のコンテナを置いておくとレイアウトが崩れません
+                      badgeColor: Colors.pink,
+                    ),
+                  ),
+                ],
               ),
             ),
+
             // BottomNavigationBarItem(
             //   label: "Message",
             //   icon: Container(
@@ -449,38 +465,38 @@ class _PartnersFindState extends State<PartnersFind> {
           ),
         ],
       ),
-      actions: <Widget>[
-        Padding(
-          padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
-          child: Row(
-            children: [
-              // 通知アイコンにBadgeを追加
-              badges.Badge(
-                position: badges.BadgePosition.topEnd(top: 0, end: 0), // 位置
-                animationDuration: Duration(milliseconds: 300), // アニメーションの期間
-                badgeContent: Text('3', style: TextStyle(color: Colors.white)),
-                child: CircleAvatar(
-                  backgroundColor: Colors.white,
-                  child: Icon(
-                    Icons.notifications,
-                    color: Colors.grey,
-                    size: 24.0,
-                  ),
-                ),
-                badgeColor: Colors.pink, // 数字の背景色
-              ),
-              CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Icon(
-                  Icons.tune_sharp,
-                  color: Colors.grey,
-                  size: 24.0,
-                ),
-              ),
-            ],
-          ),
-        ),
-      ],
+      // actions: <Widget>[
+      //   Padding(
+      //     padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
+      //     child: Row(
+      //       children: [
+      //         // 通知アイコンにBadgeを追加
+      //         badges.Badge(
+      //           position: badges.BadgePosition.topEnd(top: 0, end: 0), // 位置
+      //           animationDuration: Duration(milliseconds: 300), // アニメーションの期間
+      //           badgeContent: Text('3', style: TextStyle(color: Colors.white)),
+      //           child: CircleAvatar(
+      //             backgroundColor: Colors.white,
+      //             child: Icon(
+      //               Icons.notifications,
+      //               color: Colors.grey,
+      //               size: 24.0,
+      //             ),
+      //           ),
+      //           badgeColor: Colors.pink, // 数字の背景色
+      //         ),
+      //         CircleAvatar(
+      //           backgroundColor: Colors.white,
+      //           child: Icon(
+      //             Icons.tune_sharp,
+      //             color: Colors.grey,
+      //             size: 24.0,
+      //           ),
+      //         ),
+      //       ],
+      //     ),
+      //   ),
+      // ],
     );
   }
 }
