@@ -6,7 +6,7 @@ import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'content.dart';
 import 'detailpage.dart';
-import 'message_wedget.dart';
+// import 'message_wedget.dart';
 import 'package:badges/badges.dart' as badges;
 
 class PartnersFind extends StatefulWidget {
