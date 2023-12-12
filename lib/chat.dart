@@ -26,6 +26,9 @@ class Chat extends StatelessWidget {
                   rightBalloon(),
                   photo(),
                   VideoDisplay(),
+                  leftBalloon(),
+                  LeftPhoto(), // 左寄せ写真を追加
+                  LeftVideoDisplay(), // 左寄せビデオを追加
                 ],
               ),
             ),
@@ -324,6 +327,78 @@ class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> {
   @override
   void dispose() {
     _chewieController?.dispose();
+    super.dispose();
+  }
+}
+
+class LeftPhoto extends StatelessWidget {
+  const LeftPhoto({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Align(
+        alignment: Alignment.centerLeft,
+        child: Image.asset(
+          'assets/img/1.jpg', // 画像パスを適切に設定
+          width: 250,
+          height: 150,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+}
+
+class LeftVideoDisplay extends StatefulWidget {
+  const LeftVideoDisplay({Key? key}) : super(key: key);
+
+  @override
+  _LeftVideoDisplayState createState() => _LeftVideoDisplayState();
+}
+
+class _LeftVideoDisplayState extends State<LeftVideoDisplay> {
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.asset('assets/video/1.mp4')
+      ..initialize().then((_) {
+        setState(() {});
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        _controller.pause();
+        await Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => FullScreenVideoPlayer(controller: _controller),
+        ));
+        _controller.play();
+      },
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: Align(
+          alignment: Alignment.centerLeft, // 左寄せに変更
+          child: Container(
+            width: 250,
+            height: 150,
+            child: _controller.value.isInitialized
+                ? VideoPlayer(_controller)
+                : Container(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
     super.dispose();
   }
 }
