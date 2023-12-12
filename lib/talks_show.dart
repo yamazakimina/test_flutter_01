@@ -360,6 +360,7 @@ class LeftVideoDisplay extends StatefulWidget {
 
 class _LeftVideoDisplayState extends State<LeftVideoDisplay> {
   late VideoPlayerController _controller;
+  bool _isPlaying = false; // 追加: ビデオの再生状態を追跡する変数
 
   @override
   void initState() {
@@ -367,28 +368,58 @@ class _LeftVideoDisplayState extends State<LeftVideoDisplay> {
     _controller = VideoPlayerController.asset('assets/video/1.mp4')
       ..initialize().then((_) {
         setState(() {});
+        // ビデオの再生状態のリスナーを追加
+        _controller.addListener(() {
+          final isPlaying = _controller.value.isPlaying;
+          if (isPlaying != _isPlaying) {
+            setState(() {
+              _isPlaying = isPlaying;
+            });
+          }
+        });
       });
   }
 
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
-      onTap: () async {
-        _controller.pause();
-        await Navigator.of(context).push(MaterialPageRoute(
-          builder: (context) => FullScreenVideoPlayer(controller: _controller),
-        ));
-        _controller.play();
+      onTap: () {
+        if (_controller.value.isInitialized && !_controller.value.isPlaying) {
+          setState(() {
+            _controller.play();
+            _isPlaying = true;
+          });
+        } else if (_controller.value.isInitialized &&
+            _controller.value.isPlaying) {
+          setState(() {
+            _controller.pause();
+            _isPlaying = false;
+          });
+        }
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 20),
         child: Align(
-          alignment: Alignment.centerLeft, // 左寄せに変更
+          alignment: Alignment.centerLeft,
           child: Container(
             width: 250,
             height: 150,
             child: _controller.value.isInitialized
-                ? VideoPlayer(_controller)
+                ? Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(_controller),
+                      ),
+                      if (!_isPlaying)
+                        Icon(
+                          Icons.play_circle_outline,
+                          color: Colors.white,
+                          size: 50.0,
+                        ),
+                    ],
+                  )
                 : Container(),
           ),
         ),
