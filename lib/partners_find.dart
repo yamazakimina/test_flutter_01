@@ -6,7 +6,7 @@ import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'content.dart';
 import 'detailpage.dart';
-// import 'message_wedget.dart';
+import 'message_wedget.dart';
 import 'package:badges/badges.dart' as badges;
 
 class PartnersFind extends StatefulWidget {
@@ -161,9 +161,19 @@ class _PartnersFindState extends State<PartnersFind> {
               label: "Matches",
               icon: Stack(
                 children: [
-                  Icon(
-                    Icons.favorite_border,
-                    color: Colors.grey,
+                  GestureDetector(
+                    onTap: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const ChatScreen(),
+                        ),
+                      );
+                    },
+                    child: Icon(
+                      Icons.favorite_border,
+                      color: Colors.grey,
+                    ),
                   ),
                   Positioned(
                     top: 0,
@@ -184,14 +194,14 @@ class _PartnersFindState extends State<PartnersFind> {
             //   label: "Message",
             //   icon: Container(
             //     child: GestureDetector(
-            //       onTap: () {
-            //         Navigator.push(
-            //           context,
-            //           MaterialPageRoute(
-            //             builder: (context) => const ChatScreen(),
-            //           ),
-            //         );
-            //       },
+            // onTap: () {
+            //   Navigator.push(
+            //     context,
+            //     MaterialPageRoute(
+            //       builder: (context) => const ChatScreen(),
+            //     ),
+            //   );
+            // },
             //       child: Icon(
             //         Icons.mail_outline,
             //         color: Colors.grey,
