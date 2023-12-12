@@ -2,6 +2,7 @@ import 'chat.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'package:badges/badges.dart' as badges;
 
 Future<List<String>> fetchUserImages(int count) async {
   final response =
@@ -179,7 +180,7 @@ class MessageWidget extends StatelessWidget {
               );
             },
             contentPadding:
-                const EdgeInsets.symmetric(horizontal: 32, vertical: 4),
+                const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             leading: ClipOval(
               child: Image.network(
                 imageUrls[index],
@@ -188,7 +189,16 @@ class MessageWidget extends StatelessWidget {
                 fit: BoxFit.cover,
               ),
             ),
-            trailing: const Text('**分前'),
+            trailing: Column(
+              mainAxisSize: MainAxisSize.min, // コンテンツに合わせてサイズを調整
+              children: [
+                const Text('**分前'), // 元々のテキスト
+                badges.Badge(
+                  badgeContent: Text(''), // バッジの内容
+                  badgeColor: Colors.pink, // バッジの色
+                ),
+              ],
+            ),
             title: const Text('test'),
             subtitle: const Text('sample'),
           );
