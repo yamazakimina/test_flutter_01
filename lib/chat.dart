@@ -62,21 +62,21 @@ class Chat extends StatelessWidget {
           ),
         ],
       ),
-      actions: <Widget>[
-        IconButton(
-          onPressed: () {},
-          icon: const Icon(Icons.video_call),
-          color: Colors.grey,
-          iconSize: 36,
-        ),
-      ],
+      // actions: <Widget>[
+      //   IconButton(
+      //     onPressed: () {},
+      //     icon: const Icon(Icons.video_call),
+      //     color: Colors.grey,
+      //     iconSize: 36,
+      //   ),
+      // ],
       centerTitle: true,
     );
   }
 
   Padding leftBalloon() {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 28.0),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Row(
         children: <Widget>[
           CircleAvatar(
@@ -92,13 +92,15 @@ class Chat extends StatelessWidget {
           const SizedBox(width: 16),
           Container(
             decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(20),
               color: Color.fromARGB(255, 233, 233, 233),
+              borderRadius: BorderRadius.only(
+                topRight: Radius.circular(20),
+                topLeft: Radius.circular(20),
+                bottomRight: Radius.circular(20),
+              ),
             ),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Text('いや、いきなり無理でしょ'),
-            ),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+            child: Text('いや、いきなり無理でしょ'),
           ),
         ],
       ),
@@ -161,31 +163,27 @@ class Chat extends StatelessWidget {
 }
 
 class rightBalloon extends StatelessWidget {
-  const rightBalloon({
-    super.key,
-  });
+  const rightBalloon({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 28),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Align(
         alignment: Alignment.centerRight,
         child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
           decoration: BoxDecoration(
-            borderRadius: BorderRadius.only(
-              topRight: Radius.circular(40),
-              topLeft: Radius.circular(40),
-              bottomLeft: Radius.circular(40),
-            ),
             color: Colors.blue,
-          ),
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
-            child: Text(
-              'こんにちは。今日の夜会えますか？',
-              style: TextStyle(color: Colors.white),
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+              bottomLeft: Radius.circular(20),
             ),
+          ),
+          child: Text(
+            'こんにちは。今日の夜会えますか？',
+            style: TextStyle(color: Colors.white),
           ),
         ),
       ),
@@ -201,7 +199,7 @@ class photo extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.only(bottom: 28),
+      padding: const EdgeInsets.only(bottom: 20),
       child: Align(
         alignment: Alignment.centerRight,
         child: Image.asset(
@@ -245,28 +243,31 @@ class _VideoDisplayState extends State<VideoDisplay> {
         ));
         _controller.play();
       },
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Container(
-          width: 250,
-          height: 150,
-          child: _controller.value.isInitialized
-              ? Stack(
-                  alignment: Alignment.center,
-                  children: <Widget>[
-                    AspectRatio(
-                      aspectRatio: _controller.value.aspectRatio,
-                      child: VideoPlayer(_controller),
-                    ),
-                    if (!_isPlaying)
-                      Icon(
-                        Icons.play_circle_outline,
-                        color: Colors.white,
-                        size: 50.0,
+      child: Padding(
+        padding: const EdgeInsets.only(bottom: 20),
+        child: Align(
+          alignment: Alignment.centerRight,
+          child: Container(
+            width: 250,
+            height: 150,
+            child: _controller.value.isInitialized
+                ? Stack(
+                    alignment: Alignment.center,
+                    children: <Widget>[
+                      AspectRatio(
+                        aspectRatio: _controller.value.aspectRatio,
+                        child: VideoPlayer(_controller),
                       ),
-                  ],
-                )
-              : Container(),
+                      if (!_isPlaying)
+                        Icon(
+                          Icons.play_circle_outline,
+                          color: Colors.white,
+                          size: 50.0,
+                        ),
+                    ],
+                  )
+                : Container(),
+          ),
         ),
       ),
     );
