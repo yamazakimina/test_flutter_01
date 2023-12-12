@@ -3,7 +3,11 @@ import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
 class Chat extends StatelessWidget {
-  const Chat({Key? key}) : super(key: key);
+  final String firstName; // ユーザーのファーストネーム
+  final String imageUrl; // ユーザーの画像URL
+
+  const Chat({Key? key, required this.firstName, required this.imageUrl})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -41,16 +45,16 @@ class Chat extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
           ClipOval(
-            child: Image.asset(
-              'assets/img/1.jpg',
+            child: Image.network(
+              imageUrl, // 画像URLを使用
               width: 50,
               height: 50,
               fit: BoxFit.cover,
             ),
           ),
           const SizedBox(height: 4),
-          const Text(
-            'test',
+          Text(
+            firstName, // ファーストネームを表示
             style: TextStyle(
               fontSize: 16.0,
               color: Colors.grey,
@@ -77,8 +81,8 @@ class Chat extends StatelessWidget {
         children: <Widget>[
           CircleAvatar(
             child: ClipOval(
-              child: Image.asset(
-                'assets/img/1.jpg',
+              child: Image.network(
+                imageUrl,
                 width: 50,
                 height: 50,
                 fit: BoxFit.cover,

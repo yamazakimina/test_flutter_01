@@ -216,9 +216,12 @@ class MessageWidget extends StatelessWidget {
           return ListTile(
             onTap: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (BuildContext context) {
-                  return const Chat();
-                }),
+                MaterialPageRoute(
+                  builder: (BuildContext context) => Chat(
+                    firstName: user['firstName']!, // ファーストネームを渡す
+                    imageUrl: user['imageUrl']!, // 画像URLを渡す
+                  ),
+                ),
               );
             },
             contentPadding:
