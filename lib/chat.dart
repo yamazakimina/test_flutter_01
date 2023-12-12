@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
 
 class Chat extends StatelessWidget {
   const Chat({Key? key}) : super(key: key);
@@ -11,18 +13,16 @@ class Chat extends StatelessWidget {
         child: Column(
           children: <Widget>[
             Expanded(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16,
-                  vertical: 32,
-                ),
-                child: Column(
-                  children: <Widget>[
-                    rightBalloon(),
-                    leftBalloon(),
-                    rightBalloon(),
-                  ],
-                ),
+              child: ListView(
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
+                children: <Widget>[
+                  rightBalloon(),
+                  leftBalloon(),
+                  rightBalloon(),
+                  photo(),
+                  VideoDisplay(),
+                ],
               ),
             ),
             TextInputWidget(),
@@ -186,5 +186,138 @@ class rightBalloon extends StatelessWidget {
         ),
       ),
     );
+  }
+}
+
+class photo extends StatelessWidget {
+  const photo({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 28),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Image.asset(
+          'assets/img/1.jpg',
+          width: 250,
+          height: 150,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+}
+
+class VideoDisplay extends StatefulWidget {
+  const VideoDisplay({Key? key}) : super(key: key);
+
+  @override
+  _VideoDisplayState createState() => _VideoDisplayState();
+}
+
+class _VideoDisplayState extends State<VideoDisplay> {
+  late VideoPlayerController _controller;
+  bool _isPlaying = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.asset('assets/video/1.mp4')
+      ..initialize().then((_) {
+        setState(() {});
+      }).catchError((error) {
+        print('Video initialization error: $error');
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () async {
+        _controller.pause();
+        await Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) => FullScreenVideoPlayer(controller: _controller),
+        ));
+        _controller.play();
+      },
+      child: Container(
+        width: 250,
+        height: 150,
+        child: _controller.value.isInitialized
+            ? Stack(
+                alignment: Alignment.center,
+                children: <Widget>[
+                  AspectRatio(
+                    aspectRatio: _controller.value.aspectRatio,
+                    child: VideoPlayer(_controller),
+                  ),
+                  if (!_isPlaying)
+                    Icon(
+                      Icons.play_circle_outline,
+                      color: Colors.white,
+                      size: 50.0,
+                    ),
+                ],
+              )
+            : Container(),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _controller.dispose();
+  }
+}
+
+class FullScreenVideoPlayer extends StatefulWidget {
+  final VideoPlayerController controller;
+
+  const FullScreenVideoPlayer({Key? key, required this.controller})
+      : super(key: key);
+
+  @override
+  _FullScreenVideoPlayerState createState() => _FullScreenVideoPlayerState();
+}
+
+class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> {
+  ChewieController? _chewieController;
+
+  @override
+  void initState() {
+    super.initState();
+    _chewieController = ChewieController(
+      videoPlayerController: widget.controller,
+      aspectRatio: widget.controller.value.aspectRatio,
+      autoPlay: true,
+      looping: false,
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: Center(
+        child: Chewie(
+          controller: _chewieController!,
+        ),
+      ),
+    );
+  }
+
+  @override
+  void dispose() {
+    _chewieController?.dispose();
+    super.dispose();
   }
 }

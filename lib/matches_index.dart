@@ -39,36 +39,7 @@ class _MatchesIndexState extends State<MatchesIndex> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).canvasColor,
-        elevation: .6,
-        title: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(
-              Icons.photo,
-              color: Colors.purple,
-              size: 30,
-            ),
-            const Text(
-              'blur',
-              style: TextStyle(
-                fontSize: 30.0,
-                color: Colors.purple,
-                fontWeight: FontWeight.bold,
-              ),
-            ),
-          ],
-        ),
-        actions: <Widget>[
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.forum),
-            color: Colors.grey,
-          ),
-        ],
-        centerTitle: true,
-      ),
+      appBar: appBar(context),
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
@@ -131,6 +102,39 @@ class _MatchesIndexState extends State<MatchesIndex> {
           ),
         ],
       ),
+    );
+  }
+
+  AppBar appBar(BuildContext context) {
+    return AppBar(
+      backgroundColor: Theme.of(context).canvasColor,
+      elevation: .6,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Icon(
+            Icons.photo,
+            color: Colors.purple,
+            size: 30,
+          ),
+          const Text(
+            'blur',
+            style: TextStyle(
+              fontSize: 30.0,
+              color: Colors.purple,
+              fontWeight: FontWeight.bold,
+            ),
+          ),
+        ],
+      ),
+      actions: <Widget>[
+        IconButton(
+          onPressed: () {},
+          icon: const Icon(Icons.forum),
+          color: Colors.grey,
+        ),
+      ],
+      centerTitle: true,
     );
   }
 }
