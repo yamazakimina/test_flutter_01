@@ -116,8 +116,17 @@ class _ChatScreenState extends State<ChatScreen> {
           ),
           const SizedBox(height: 8),
           Expanded(
-            child: SafeArea(
-              child: MessageWedget(),
+            child: FutureBuilder<List<String>>(
+              future: userImages,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  return MessageWidget(imageUrls: snapshot.data!);
+                }
+              },
             ),
           ),
         ],
@@ -147,28 +156,33 @@ class ImagesMatch extends StatelessWidget {
   }
 }
 
-class MessageWedget extends StatelessWidget {
-  const MessageWedget({
-    super.key,
-  });
+class MessageWidget extends StatelessWidget {
+  final List<String> imageUrls;
+
+  const MessageWidget({
+    Key? key,
+    required this.imageUrls,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      child: ListView(
-        children: <Widget>[
-          ListTile(
+      child: ListView.builder(
+        itemCount: imageUrls.length,
+        itemBuilder: (context, index) {
+          return ListTile(
             onTap: () {
-              Navigator.of(context)
-                  .push(MaterialPageRoute(builder: (BuildContext context) {
-                return const Chat();
-              }));
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (BuildContext context) {
+                  return const Chat();
+                }),
+              );
             },
             contentPadding:
                 const EdgeInsets.symmetric(horizontal: 32, vertical: 4),
             leading: ClipOval(
-              child: Image.asset(
-                'assets/img/1.jpg',
+              child: Image.network(
+                imageUrls[index],
                 width: 50,
                 height: 50,
                 fit: BoxFit.cover,
@@ -177,64 +191,8 @@ class MessageWedget extends StatelessWidget {
             trailing: const Text('**分前'),
             title: const Text('test'),
             subtitle: const Text('sample'),
-          ),
-          ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 32, vertical: 4),
-            leading: ClipOval(
-              child: Image.asset(
-                'assets/img/1.jpg',
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-              ),
-            ),
-            trailing: Text('**分前'),
-            title: Text('test'),
-            subtitle: Text('sample'),
-          ),
-          ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 32, vertical: 4),
-            leading: ClipOval(
-              child: Image.asset(
-                'assets/img/1.jpg',
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-              ),
-            ),
-            trailing: Text('**分前'),
-            title: Text('test'),
-            subtitle: Text('sample'),
-          ),
-          ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 32, vertical: 4),
-            leading: ClipOval(
-              child: Image.asset(
-                'assets/img/1.jpg',
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-              ),
-            ),
-            trailing: Text('**分前'),
-            title: Text('test'),
-            subtitle: Text('sample'),
-          ),
-          ListTile(
-            contentPadding: EdgeInsets.symmetric(horizontal: 32, vertical: 4),
-            leading: ClipOval(
-              child: Image.asset(
-                'assets/img/1.jpg',
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-              ),
-            ),
-            trailing: Text('**分前'),
-            title: Text('test'),
-            subtitle: Text('sample'),
-          ),
-        ],
+          );
+        },
       ),
     );
   }
