@@ -1,8 +1,39 @@
 import 'chat.dart';
 import 'package:flutter/material.dart';
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 
-class ChatScreen extends StatelessWidget {
-  const ChatScreen({Key? key});
+Future<List<String>> fetchUserImages(int count) async {
+  final response =
+      await http.get(Uri.parse('https://randomuser.me/api/?results=$count'));
+
+  if (response.statusCode == 200) {
+    List<String> imageUrls = [];
+    var data = json.decode(response.body);
+    for (var user in data['results']) {
+      imageUrls.add(user['picture']['medium']);
+    }
+    return imageUrls;
+  } else {
+    throw Exception('Failed to load user images');
+  }
+}
+
+class ChatScreen extends StatefulWidget {
+  const ChatScreen({Key? key}) : super(key: key);
+
+  @override
+  _ChatScreenState createState() => _ChatScreenState();
+}
+
+class _ChatScreenState extends State<ChatScreen> {
+  late Future<List<String>> userImages;
+
+  @override
+  void initState() {
+    super.initState();
+    userImages = fetchUserImages(50);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -51,19 +82,26 @@ class ChatScreen extends StatelessWidget {
               ),
             ),
           ),
-          // const SizedBox(height: 8),
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 0),
-            child: Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: Row(
-                children: [
-                  imagesMatch(),
-                  imagesMatch(),
-                  imagesMatch(),
-                ],
-              ),
-            ),
+          const SizedBox(height: 8),
+          FutureBuilder<List<String>>(
+            future: userImages,
+            builder: (context, snapshot) {
+              if (snapshot.connectionState == ConnectionState.waiting) {
+                return const CircularProgressIndicator();
+              } else if (snapshot.hasError) {
+                return Text('Error: ${snapshot.error}');
+              } else {
+                // 画像を表示
+                return SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    children: snapshot.data!
+                        .map((imageUrl) => ImagesMatch(imageUrl: imageUrl))
+                        .toList(),
+                  ),
+                );
+              }
+            },
           ),
           const SizedBox(height: 8),
           Padding(
@@ -88,24 +126,22 @@ class ChatScreen extends StatelessWidget {
   }
 }
 
-class imagesMatch extends StatelessWidget {
-  const imagesMatch({
-    super.key,
-  });
+class ImagesMatch extends StatelessWidget {
+  final String imageUrl;
+
+  const ImagesMatch({Key? key, required this.imageUrl}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Image.asset(
-          'assets/img/1.jpg',
-          width: 100, // 適切なサイズに調整
-          height: 100, // 適切なサイズに調整
+        Image.network(
+          imageUrl,
+          width: 100,
+          height: 100,
           fit: BoxFit.cover,
         ),
-        SizedBox(
-          width: 10,
-        ),
+        const SizedBox(width: 10),
       ],
     );
   }
