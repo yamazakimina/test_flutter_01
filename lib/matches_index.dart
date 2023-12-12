@@ -104,7 +104,7 @@ class _MatchesIndexState extends State<MatchesIndex> {
               }
             },
           ),
-          const SizedBox(height: 8),
+          const SizedBox(height: 24),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: const Text(
@@ -115,7 +115,6 @@ class _MatchesIndexState extends State<MatchesIndex> {
               ),
             ),
           ),
-          const SizedBox(height: 8),
           Expanded(
             child: FutureBuilder<List<String>>(
               future: userImages,
@@ -145,11 +144,14 @@ class ImagesMatch extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Image.network(
-          imageUrl,
-          width: 100,
-          height: 100,
-          fit: BoxFit.cover,
+        ClipRRect(
+          borderRadius: BorderRadius.circular(5),
+          child: Image.network(
+            imageUrl,
+            width: 100,
+            height: 100,
+            fit: BoxFit.cover,
+          ),
         ),
         const SizedBox(width: 10),
       ],
