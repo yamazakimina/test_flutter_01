@@ -6,7 +6,7 @@ import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'content.dart';
 import 'detailpage.dart';
-import 'message_wedget.dart';
+import 'matches_index.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
@@ -482,7 +482,7 @@ class _HomePageState extends State<HomePage> {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const ChatScreen(),
+                          builder: (context) => const MatchesIndex(),
                         ),
                       );
                     },

@@ -20,14 +20,14 @@ Future<List<String>> fetchUserImages(int count) async {
   }
 }
 
-class ChatScreen extends StatefulWidget {
-  const ChatScreen({Key? key}) : super(key: key);
+class MatchesIndex extends StatefulWidget {
+  const MatchesIndex({Key? key}) : super(key: key);
 
   @override
-  _ChatScreenState createState() => _ChatScreenState();
+  _MatchesIndexState createState() => _MatchesIndexState();
 }
 
-class _ChatScreenState extends State<ChatScreen> {
+class _MatchesIndexState extends State<MatchesIndex> {
   late Future<List<String>> userImages;
 
   @override
