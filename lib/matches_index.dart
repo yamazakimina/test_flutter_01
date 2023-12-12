@@ -4,19 +4,47 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:badges/badges.dart' as badges;
 
-Future<List<String>> fetchUserImages(int count) async {
+Future<List<Map<String, String>>> fetchUserData(int count) async {
   final response =
       await http.get(Uri.parse('https://randomuser.me/api/?results=$count'));
 
   if (response.statusCode == 200) {
-    List<String> imageUrls = [];
+    List<Map<String, String>> userData = [];
     var data = json.decode(response.body);
     for (var user in data['results']) {
-      imageUrls.add(user['picture']['medium']);
+      userData.add({
+        'imageUrl': user['picture']['medium'],
+        'firstName': user['name']['first'],
+      });
     }
-    return imageUrls;
+    return userData;
   } else {
-    throw Exception('Failed to load user images');
+    throw Exception('Failed to load user data');
+  }
+}
+
+class ImageOnlyMatch extends StatelessWidget {
+  final String imageUrl;
+
+  const ImageOnlyMatch({
+    Key? key,
+    required this.imageUrl,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(right: 10), // 右のスペースを調整
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(5),
+        child: Image.network(
+          imageUrl,
+          width: 100,
+          height: 100,
+          fit: BoxFit.cover,
+        ),
+      ),
+    );
   }
 }
 
@@ -28,12 +56,12 @@ class MatchesIndex extends StatefulWidget {
 }
 
 class _MatchesIndexState extends State<MatchesIndex> {
-  late Future<List<String>> userImages;
+  late Future<List<Map<String, String>>> userData;
 
   @override
   void initState() {
     super.initState();
-    userImages = fetchUserImages(50);
+    userData = fetchUserData(50);
   }
 
   @override
@@ -55,20 +83,21 @@ class _MatchesIndexState extends State<MatchesIndex> {
             ),
           ),
           const SizedBox(height: 8),
-          FutureBuilder<List<String>>(
-            future: userImages,
+          FutureBuilder<List<Map<String, String>>>(
+            future: userData,
             builder: (context, snapshot) {
               if (snapshot.connectionState == ConnectionState.waiting) {
                 return const CircularProgressIndicator();
               } else if (snapshot.hasError) {
                 return Text('Error: ${snapshot.error}');
               } else {
-                // 画像を表示
+                // 画像のみを表示
                 return SingleChildScrollView(
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: snapshot.data!
-                        .map((imageUrl) => ImagesMatch(imageUrl: imageUrl))
+                        .map((user) =>
+                            ImageOnlyMatch(imageUrl: user['imageUrl']!))
                         .toList(),
                   ),
                 );
@@ -87,15 +116,15 @@ class _MatchesIndexState extends State<MatchesIndex> {
             ),
           ),
           Expanded(
-            child: FutureBuilder<List<String>>(
-              future: userImages,
+            child: FutureBuilder<List<Map<String, String>>>(
+              future: userData,
               builder: (context, snapshot) {
                 if (snapshot.connectionState == ConnectionState.waiting) {
                   return const CircularProgressIndicator();
                 } else if (snapshot.hasError) {
                   return Text('Error: ${snapshot.error}');
                 } else {
-                  return MessageWidget(imageUrls: snapshot.data!);
+                  return MessageWidget(userData: snapshot.data!);
                 }
               },
             ),
@@ -141,8 +170,13 @@ class _MatchesIndexState extends State<MatchesIndex> {
 
 class ImagesMatch extends StatelessWidget {
   final String imageUrl;
+  final String firstName;
 
-  const ImagesMatch({Key? key, required this.imageUrl}) : super(key: key);
+  const ImagesMatch({
+    Key? key,
+    required this.imageUrl,
+    required this.firstName,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -157,6 +191,7 @@ class ImagesMatch extends StatelessWidget {
             fit: BoxFit.cover,
           ),
         ),
+        Text(firstName),
         const SizedBox(width: 10),
       ],
     );
@@ -164,19 +199,20 @@ class ImagesMatch extends StatelessWidget {
 }
 
 class MessageWidget extends StatelessWidget {
-  final List<String> imageUrls;
+  final List<Map<String, String>> userData;
 
   const MessageWidget({
     Key? key,
-    required this.imageUrls,
+    required this.userData,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return Material(
       child: ListView.builder(
-        itemCount: imageUrls.length,
+        itemCount: userData.length,
         itemBuilder: (context, index) {
+          var user = userData[index];
           return ListTile(
             onTap: () {
               Navigator.of(context).push(
@@ -189,7 +225,7 @@ class MessageWidget extends StatelessWidget {
                 const EdgeInsets.symmetric(horizontal: 16, vertical: 4),
             leading: ClipOval(
               child: Image.network(
-                imageUrls[index],
+                userData[index]['imageUrl']!,
                 width: 50,
                 height: 50,
                 fit: BoxFit.cover,
@@ -205,7 +241,7 @@ class MessageWidget extends StatelessWidget {
                 ),
               ],
             ),
-            title: const Text('test'),
+            title: Text(user['firstName'] ?? 'Unknown'),
             subtitle: const Text('sample'),
           );
         },
