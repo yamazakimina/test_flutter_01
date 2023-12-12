@@ -127,88 +127,70 @@ class buttonLikes extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
       child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-        children: [
-          Container(
-            decoration: const BoxDecoration(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        FloatingActionButton(
+          heroTag: 'nope',
+          backgroundColor: Colors.white,
+          onPressed: () {
+            // _matchEngine!.currentItem?.nope();
+          },
+          shape: CircleBorder(),
+          child: ShaderMask(
+            child: const Icon(
+              Icons.close,
               color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(blurRadius: 10, color: Colors.black, spreadRadius: 1)
-              ],
+              size: 36,
             ),
-            child: CircleAvatar(
-              radius: 36,
-              backgroundColor: Colors.white,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.close,
-                  color: Colors.red,
-                  size: 36,
-                ),
-                onPressed: () {
-                  // _matchEngine!.currentItem?.nope();
-                },
-                // child: const Text("Nope"),
-              ),
-            ),
+            shaderCallback: (Rect rect) {
+              return LinearGradient(
+                colors: [
+                  Colors.pink,
+                  Colors.red,
+                  Colors.red,
+                ],
+              ).createShader(rect);
+            },
           ),
-          Container(
-            decoration: const BoxDecoration(
+        ),
+        // FloatingActionButton(
+        //   backgroundColor: Colors.white,
+        //   onPressed: () {
+        //     _matchEngine!.currentItem?.superLike();
+        //   },
+        // shape: CircleBorder(),
+        //   child: const Icon(
+        //     Icons.star,
+        //     color: Colors.blue,
+        //     size: 32.0,
+        //   ),
+        // ),
+        FloatingActionButton(
+          heroTag: 'like',
+          backgroundColor: Colors.white,
+          onPressed: () {
+            // _matchEngine!.currentItem?.like();
+          },
+          shape: CircleBorder(),
+          child: ShaderMask(
+            child: const Icon(
+              Icons.favorite,
               color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(blurRadius: 10, color: Colors.black, spreadRadius: 1)
-              ],
+              size: 36,
             ),
-            child: CircleAvatar(
-              radius: 32.0,
-              backgroundColor: Colors.white,
-              child: CircleAvatar(
-                radius: 32.0,
-                backgroundColor: Colors.white,
-                child: Center(
-                  child: IconButton(
-                    icon: const Icon(
-                      Icons.star,
-                      color: Colors.blue,
-                      size: 32.0,
-                    ),
-                    onPressed: () {
-                      // _matchEngine!.currentItem?.superLike();
-                    },
-                    //child: const Text("Superlike"),
-                  ),
-                ),
-              ),
-            ),
+            shaderCallback: (Rect rect) {
+              return LinearGradient(
+                colors: [
+                  Colors.yellow,
+                  Colors.green,
+                  Colors.green,
+                ],
+              ).createShader(rect);
+            },
           ),
-          Container(
-            decoration: const BoxDecoration(
-              color: Colors.white,
-              shape: BoxShape.circle,
-              boxShadow: [
-                BoxShadow(blurRadius: 10, color: Colors.black, spreadRadius: 1)
-              ],
-            ),
-            child: CircleAvatar(
-              radius: 36,
-              backgroundColor: Colors.white,
-              child: IconButton(
-                icon: const Icon(
-                  Icons.favorite,
-                  color: Colors.green,
-                  size: 36,
-                ),
-                onPressed: () {
-                  // _matchEngine!.currentItem?.like();
-                },
-                //  child: const Text("Like"),
-              ),
-            ),
-          )
-        ],
-      ),
+        ),
+      ],
+    ),
     );
   }
 }
