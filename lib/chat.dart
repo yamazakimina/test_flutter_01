@@ -228,8 +228,6 @@ class _VideoDisplayState extends State<VideoDisplay> {
     _controller = VideoPlayerController.asset('assets/video/1.mp4')
       ..initialize().then((_) {
         setState(() {});
-      }).catchError((error) {
-        print('Video initialization error: $error');
       });
   }
 
@@ -243,26 +241,29 @@ class _VideoDisplayState extends State<VideoDisplay> {
         ));
         _controller.play();
       },
-      child: Container(
-        width: 250,
-        height: 150,
-        child: _controller.value.isInitialized
-            ? Stack(
-                alignment: Alignment.center,
-                children: <Widget>[
-                  AspectRatio(
-                    aspectRatio: _controller.value.aspectRatio,
-                    child: VideoPlayer(_controller),
-                  ),
-                  if (!_isPlaying)
-                    Icon(
-                      Icons.play_circle_outline,
-                      color: Colors.white,
-                      size: 50.0,
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Container(
+          width: 250,
+          height: 150,
+          child: _controller.value.isInitialized
+              ? Stack(
+                  alignment: Alignment.center,
+                  children: <Widget>[
+                    AspectRatio(
+                      aspectRatio: _controller.value.aspectRatio,
+                      child: VideoPlayer(_controller),
                     ),
-                ],
-              )
-            : Container(),
+                    if (!_isPlaying)
+                      Icon(
+                        Icons.play_circle_outline,
+                        color: Colors.white,
+                        size: 50.0,
+                      ),
+                  ],
+                )
+              : Container(),
+        ),
       ),
     );
   }
