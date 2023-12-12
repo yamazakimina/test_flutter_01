@@ -456,7 +456,7 @@ class _PartnersFindState extends State<PartnersFind> {
   AppBar appBar() {
     return AppBar(
       elevation: 0.0,
-      backgroundColor: Colors.white,
+      backgroundColor: Theme.of(context).canvasColor,
       toolbarHeight: 72.0,
       titleSpacing: 36.0,
       title: Row(
