@@ -1,4 +1,4 @@
-import 'chat.dart';
+import 'package:blur_test_1/talks_show.dart';
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
@@ -217,7 +217,7 @@ class MessageWidget extends StatelessWidget {
             onTap: () {
               Navigator.of(context).push(
                 MaterialPageRoute(
-                  builder: (BuildContext context) => Chat(
+                  builder: (BuildContext context) => TalksShow(
                     firstName: user['firstName']!, // ファーストネームを渡す
                     imageUrl: user['imageUrl']!, // 画像URLを渡す
                   ),

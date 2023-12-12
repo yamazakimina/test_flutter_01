@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
-class Chat extends StatelessWidget {
+class TalksShow extends StatelessWidget {
   final String firstName; // ユーザーのファーストネーム
   final String imageUrl; // ユーザーの画像URL
 
-  const Chat({Key? key, required this.firstName, required this.imageUrl})
+  const TalksShow({Key? key, required this.firstName, required this.imageUrl})
       : super(key: key);
 
   @override
