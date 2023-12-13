@@ -35,7 +35,6 @@ class _TalksShowState extends State<TalksShow> {
       messages.add(rightBalloon()); // rightBalloon ウィジェットを追加
       messages.add(photo()); // photo ウィジェットを追加
       messages.add(VideoDisplay());
-      messages.add(SizedBox(height: 10)); // VideoDisplay ウィジェットを追加
     });
   }
 
