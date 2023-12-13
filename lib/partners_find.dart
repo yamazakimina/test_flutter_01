@@ -16,36 +16,45 @@ class PartnersFind extends StatefulWidget {
   _PartnersFindState createState() => _PartnersFindState();
 }
 
+class CardStatus {
+  String swipeStatus = "";
+  CardStatus();
+}
+
 //ランダムなユーザーを取得する
 class _PartnersFindState extends State<PartnersFind> {
-  final String url = "https://randomuser.me/api/?results=50"; 
-  bool isLoading =
-      true; 
-  late List usersData; 
-  final List<SwipeItem> _swipeItems =
-      <SwipeItem>[]; 
+  String swipeStatus = "";
+  final String url = "https://randomuser.me/api/?results=50";
+  bool isLoading = true;
+  late List usersData;
+  final List<SwipeItem> _swipeItems = <SwipeItem>[];
   MatchEngine? _matchEngine;
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
+  List<CardStatus> cardStatuses = [];
 
   Future getData() async {
     var response = await http.get(
-      Uri.parse(url), 
-      headers: {"Accept": "application/json"}, 
+      Uri.parse(url),
+      headers: {"Accept": "application/json"},
     );
 
 //JSON形式のデータをデコード
-    List data = jsonDecode(response.body)['results']; 
+    List data = jsonDecode(response.body)['results'];
     setState(() {
-      usersData = data; 
+      usersData = data;
 
       if (usersData.isNotEmpty) {
         //そのデータが空でない場合に処理
         for (int i = 0; i < usersData.length; i++) {
+          cardStatuses.add(CardStatus());
           _swipeItems.add(SwipeItem(
               // content: Content(text: _names[i], color: _colors[i]),
               content: Content(text: usersData[i]['name']['first']),
               likeAction: () {
+                setState(() {
+                  swipeStatus = "LIKE";
+                });
                 _scaffoldKey.currentState?.showSnackBar(const SnackBar(
                   content: Text("Liked "),
                   //  content: Text("Liked ${_names[i]}"),
@@ -53,18 +62,34 @@ class _PartnersFindState extends State<PartnersFind> {
                 ));
               },
               nopeAction: () {
+                setState(() {
+                  swipeStatus = "NOPE";
+                });
                 _scaffoldKey.currentState?.showSnackBar(SnackBar(
                   content: Text("Nope ${usersData[i]['name']['first']}"),
                   duration: const Duration(milliseconds: 500),
                 ));
               },
               onSlideUpdate: (SlideRegion? region) async {
-                print("Region $region");
+                if (region == SlideRegion.inNopeRegion) {
+                  setState(() {
+                    cardStatuses[i].swipeStatus = "NOPE";
+                  });
+                } else if (region == SlideRegion.inLikeRegion) {
+                  setState(() {
+                    cardStatuses[i].swipeStatus = "LIKE";
+                  });
+                } else {
+                  setState(() {
+                    cardStatuses[i].swipeStatus = "";
+                  });
+                }
               }));
         } //for loop
         _matchEngine = MatchEngine(swipeItems: _swipeItems);
         isLoading = false;
       } //if
+      swipeStatus = "";
     }); // setState
   } // getData
 
@@ -99,11 +124,41 @@ class _PartnersFindState extends State<PartnersFind> {
                               card(index),
                               shadow(context),
                               nameAndAge(index, context),
+                              if (cardStatuses[index].swipeStatus == "LIKE")
+                                Positioned(
+                                  top: 20,
+                                  left: 20,
+                                  child: Text(
+                                    "Like",
+                                    style: TextStyle(
+                                      color: Colors.green, // お好みの色に調整
+                                      fontSize: 36,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
+                              if (cardStatuses[index].swipeStatus == "NOPE")
+                                Positioned(
+                                  top: 20,
+                                  right: 20,
+                                  child: Text(
+                                    "NOPE",
+                                    style: TextStyle(
+                                      color: Colors.red, // お好みの色に調整
+                                      fontSize: 36,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  ),
+                                ),
                             ],
                           );
                         },
                         onStackFinished: stackFinished,
-                        itemChanged: swipeChanged,
+                        itemChanged: (SwipeItem item, int index) {
+                          setState(() {
+                            swipeStatus = "";
+                          });
+                        },
                         fillSpace: true,
                       ),
                     ),
@@ -174,7 +229,6 @@ class _PartnersFindState extends State<PartnersFind> {
                 ],
               ),
             ),
-
             BottomNavigationBarItem(
               label: "Mypage",
               icon: Container(
@@ -198,6 +252,9 @@ class _PartnersFindState extends State<PartnersFind> {
           heroTag: 'nope',
           backgroundColor: Colors.white,
           onPressed: () {
+            setState(() {
+              swipeStatus = "NOPE";
+            });
             _matchEngine!.currentItem?.nope();
           },
           shape: CircleBorder(),
@@ -222,6 +279,9 @@ class _PartnersFindState extends State<PartnersFind> {
           heroTag: 'like',
           backgroundColor: Colors.white,
           onPressed: () {
+            setState(() {
+              swipeStatus = "LIKE";
+            });
             _matchEngine!.currentItem?.like();
           },
           shape: CircleBorder(),
