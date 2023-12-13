@@ -2,116 +2,137 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
-class TalksShow extends StatelessWidget {
+class TalksShow extends StatefulWidget {
   final String firstName; // ユーザーのファーストネーム
   final String imageUrl; // ユーザーの画像URL
 
   const TalksShow({Key? key, required this.firstName, required this.imageUrl})
       : super(key: key);
+  @override
+  _TalksShowState createState() => _TalksShowState(); // createState メソッドの実装
+}
+
+class _TalksShowState extends State<TalksShow> {
+  List<Widget> messages = []; // チャットのメッセージを保持するリスト
+
+  @override
+  void initState() {
+    super.initState();
+    messages.addAll([
+      rightBalloon(),
+      leftBalloon(widget.imageUrl),
+      rightBalloon(),
+      photo(),
+      VideoDisplay(),
+      leftBalloon(widget.imageUrl),
+      LeftPhoto(),
+      LeftVideoDisplay(),
+    ]);
+  }
+
+  void sendFixedContent() {
+    setState(() {
+      messages.add(rightBalloon()); // rightBalloon ウィジェットを追加
+      messages.add(photo()); // photo ウィジェットを追加
+      messages.add(VideoDisplay()); // VideoDisplay ウィジェットを追加
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: appBar(context),
+      appBar: appBar(context, widget.firstName, widget.imageUrl),
       body: SafeArea(
         child: Column(
           children: <Widget>[
             Expanded(
-              child: ListView(
-                padding:
-                    const EdgeInsets.symmetric(horizontal: 16, vertical: 32),
-                children: <Widget>[
-                  rightBalloon(),
-                  leftBalloon(),
-                  rightBalloon(),
-                  photo(),
-                  VideoDisplay(),
-                  leftBalloon(),
-                  LeftPhoto(), // 左寄せ写真を追加
-                  LeftVideoDisplay(), // 左寄せビデオを追加
-                ],
+              child: ListView.builder(
+                itemCount: messages.length,
+                itemBuilder: (context, index) {
+                  return messages[index];
+                },
               ),
             ),
-            TextInputWidget(),
+            TextInputWidget(
+              onSend: sendFixedContent,
+            ),
           ],
         ),
       ),
     );
   }
+}
 
-  AppBar appBar(BuildContext context) {
-    return AppBar(
-      backgroundColor: Theme.of(context).canvasColor,
-      elevation: .6,
-      toolbarHeight: 80, // AppBarの高さを調整
-      title: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          ClipOval(
+AppBar appBar(BuildContext context, String firstName, String imageUrl) {
+  return AppBar(
+    backgroundColor: Theme.of(context).canvasColor,
+    elevation: .6,
+    toolbarHeight: 80, // AppBarの高さを調整
+    title: Column(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: [
+        ClipOval(
+          child: Image.network(
+            imageUrl, // 画像URLを使用
+            width: 50,
+            height: 50,
+            fit: BoxFit.cover,
+          ),
+        ),
+        const SizedBox(height: 4),
+        Text(
+          firstName, // ファーストネームを表示
+          style: TextStyle(
+            fontSize: 16.0,
+            color: Colors.grey,
+          ),
+        ),
+      ],
+    ),
+    centerTitle: true,
+  );
+}
+
+Padding leftBalloon(String imageUrl) {
+  return Padding(
+    padding: const EdgeInsets.only(bottom: 20),
+    child: Row(
+      children: <Widget>[
+        CircleAvatar(
+          child: ClipOval(
             child: Image.network(
-              imageUrl, // 画像URLを使用
+              imageUrl,
               width: 50,
               height: 50,
               fit: BoxFit.cover,
             ),
           ),
-          const SizedBox(height: 4),
-          Text(
-            firstName, // ファーストネームを表示
-            style: TextStyle(
-              fontSize: 16.0,
-              color: Colors.grey,
+        ),
+        const SizedBox(width: 16),
+        Container(
+          decoration: BoxDecoration(
+            color: Color.fromARGB(255, 233, 233, 233),
+            borderRadius: BorderRadius.only(
+              topRight: Radius.circular(20),
+              topLeft: Radius.circular(20),
+              bottomRight: Radius.circular(20),
             ),
           ),
-        ],
-      ),
-      // actions: <Widget>[
-      //   IconButton(
-      //     onPressed: () {},
-      //     icon: const Icon(Icons.video_call),
-      //     color: Colors.grey,
-      //     iconSize: 36,
-      //   ),
-      // ],
-      centerTitle: true,
-    );
-  }
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          child: Text('いや、いきなり無理でしょ'),
+        ),
+      ],
+    ),
+  );
+}
 
-  Padding leftBalloon() {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: Row(
-        children: <Widget>[
-          CircleAvatar(
-            child: ClipOval(
-              child: Image.network(
-                imageUrl,
-                width: 50,
-                height: 50,
-                fit: BoxFit.cover,
-              ),
-            ),
-          ),
-          const SizedBox(width: 16),
-          Container(
-            decoration: BoxDecoration(
-              color: Color.fromARGB(255, 233, 233, 233),
-              borderRadius: BorderRadius.only(
-                topRight: Radius.circular(20),
-                topLeft: Radius.circular(20),
-                bottomRight: Radius.circular(20),
-              ),
-            ),
-            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-            child: Text('いや、いきなり無理でしょ'),
-          ),
-        ],
-      ),
-    );
-  }
+class TextInputWidget extends StatelessWidget {
+  final VoidCallback onSend;
 
-  // 修正: TextInputWidgetメソッドを追加
-  Container TextInputWidget() {
+  TextInputWidget({Key? key, required this.onSend}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
     return Container(
       height: 68,
       child: Row(
@@ -137,12 +158,6 @@ class TalksShow extends StatelessWidget {
               ),
             ),
           ),
-          // IconButton(
-          //   icon: Icon(Icons.mic),
-          //   iconSize: 28,
-          //   color: Colors.black54,
-          //   onPressed: () {},
-          // ),
           Center(
             child: Padding(
               padding: const EdgeInsets.all(8.0),
@@ -154,7 +169,7 @@ class TalksShow extends StatelessWidget {
                 child: IconButton(
                   icon: Icon(Icons.send),
                   color: Colors.white,
-                  onPressed: () {},
+                  onPressed: onSend,
                 ),
               ),
             ),
