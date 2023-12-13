@@ -16,27 +16,28 @@ class PartnersFind extends StatefulWidget {
   _PartnersFindState createState() => _PartnersFindState();
 }
 
+//ランダムなユーザーを取得する
 class _PartnersFindState extends State<PartnersFind> {
-  final String url = "https://randomuser.me/api/?results=50"; //ランダムなユーザーを取得する
+  final String url = "https://randomuser.me/api/?results=50"; 
   bool isLoading =
-      true; //データがロード中かどうかを示すフラグ。初期値は true で、データがロードされると false に変更される。
-  late List usersData; //取得したユーザーデータを格納するためのリスト。late は、後で初期化されることを示している。
+      true; 
+  late List usersData; 
   final List<SwipeItem> _swipeItems =
-      <SwipeItem>[]; //カードスワイプ機能に使用される SwipeItem オブジェクトのリスト
+      <SwipeItem>[]; 
   MatchEngine? _matchEngine;
-  final GlobalKey<ScaffoldMessengerState> _scaffoldKey = //スナックバーを表示する
+  final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
 
   Future getData() async {
     var response = await http.get(
-      Uri.parse(url), //URL文字列を Uri オブジェクトに変換しています。これにより、URLが正しい形式であることが確認されます。
-      headers: {"Accept": "application/json"}, //APIがJSON形式でデータを返すことをサーバーに伝えるもの
-    ); //外部APIからのレスポンスが格納
+      Uri.parse(url), 
+      headers: {"Accept": "application/json"}, 
+    );
 
-    List data = jsonDecode(response.body)['results']; //JSON形式のデータをデコード
+//JSON形式のデータをデコード
+    List data = jsonDecode(response.body)['results']; 
     setState(() {
-      //UIが変更されたことをフレームワークに通知し、再描画
-      usersData = data; //外部APIから取得したデータが格納
+      usersData = data; 
 
       if (usersData.isNotEmpty) {
         //そのデータが空でない場合に処理
@@ -57,12 +58,6 @@ class _PartnersFindState extends State<PartnersFind> {
                   duration: const Duration(milliseconds: 500),
                 ));
               },
-              // superlikeAction: () {
-              //   _scaffoldKey.currentState?.showSnackBar(SnackBar(
-              //     content: Text("Superliked ${usersData[i]['name']['first']}"),
-              //     duration: const Duration(milliseconds: 500),
-              //   ));
-              // },
               onSlideUpdate: (SlideRegion? region) async {
                 print("Region $region");
               }));
@@ -109,7 +104,6 @@ class _PartnersFindState extends State<PartnersFind> {
                         },
                         onStackFinished: stackFinished,
                         itemChanged: swipeChanged,
-                        // upSwipeAllowed: true,
                         fillSpace: true,
                       ),
                     ),
@@ -148,15 +142,6 @@ class _PartnersFindState extends State<PartnersFind> {
                 ),
               ),
             ),
-            // BottomNavigationBarItem(
-            //   label: "Special",
-            //   icon: Container(
-            //     child: Icon(
-            //       Icons.search,
-            //       color: Colors.grey,
-            //     ),
-            //   ),
-            // ),
             BottomNavigationBarItem(
               label: "Matches",
               icon: Stack(
@@ -190,25 +175,6 @@ class _PartnersFindState extends State<PartnersFind> {
               ),
             ),
 
-            // BottomNavigationBarItem(
-            //   label: "Message",
-            //   icon: Container(
-            //     child: GestureDetector(
-            // onTap: () {
-            //   Navigator.push(
-            //     context,
-            //     MaterialPageRoute(
-            //       builder: (context) => const MatchesIndex(),
-            //     ),
-            //   );
-            // },
-            //       child: Icon(
-            //         Icons.mail_outline,
-            //         color: Colors.grey,
-            //       ),
-            //     ),
-            //   ),
-            // ),
             BottomNavigationBarItem(
               label: "Mypage",
               icon: Container(
@@ -252,18 +218,6 @@ class _PartnersFindState extends State<PartnersFind> {
             },
           ),
         ),
-        // FloatingActionButton(
-        //   backgroundColor: Colors.white,
-        //   onPressed: () {
-        //     _matchEngine!.currentItem?.superLike();
-        //   },
-        // shape: CircleBorder(),
-        //   child: const Icon(
-        //     Icons.star,
-        //     color: Colors.blue,
-        //     size: 32.0,
-        //   ),
-        // ),
         FloatingActionButton(
           heroTag: 'like',
           backgroundColor: Colors.white,
@@ -475,38 +429,6 @@ class _PartnersFindState extends State<PartnersFind> {
           ),
         ],
       ),
-      // actions: <Widget>[
-      //   Padding(
-      //     padding: const EdgeInsets.fromLTRB(0, 0, 16.0, 0),
-      //     child: Row(
-      //       children: [
-      //         // 通知アイコンにBadgeを追加
-      //         badges.Badge(
-      //           position: badges.BadgePosition.topEnd(top: 0, end: 0), // 位置
-      //           animationDuration: Duration(milliseconds: 300), // アニメーションの期間
-      //           badgeContent: Text('3', style: TextStyle(color: Colors.white)),
-      //           child: CircleAvatar(
-      //             backgroundColor: Colors.white,
-      //             child: Icon(
-      //               Icons.notifications,
-      //               color: Colors.grey,
-      //               size: 24.0,
-      //             ),
-      //           ),
-      //           badgeColor: Colors.pink, // 数字の背景色
-      //         ),
-      //         CircleAvatar(
-      //           backgroundColor: Colors.white,
-      //           child: Icon(
-      //             Icons.tune_sharp,
-      //             color: Colors.grey,
-      //             size: 24.0,
-      //           ),
-      //         ),
-      //       ],
-      //     ),
-      //   ),
-      // ],
     );
   }
 }
