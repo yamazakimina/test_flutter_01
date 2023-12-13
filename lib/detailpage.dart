@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:ui';
 
 class DetailsPage extends StatefulWidget {
   final String name, gender, city, state, country, email, avatar, age, phone;

@@ -4,9 +4,9 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
-import 'content.dart';
-import 'detailpage.dart';
-import 'matches_index.dart';
+import '../content.dart';
+import '../detailpage.dart';
+import '../matches_index.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);
