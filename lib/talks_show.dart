@@ -19,6 +19,7 @@ class _TalksShowState extends State<TalksShow> {
   void initState() {
     super.initState();
     messages.addAll([
+      SizedBox(height: 20),
       rightBalloon(),
       leftBalloon(widget.imageUrl),
       rightBalloon(),
@@ -42,21 +43,24 @@ class _TalksShowState extends State<TalksShow> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: appBar(context, widget.firstName, widget.imageUrl),
-      body: SafeArea(
-        child: Column(
-          children: <Widget>[
-            Expanded(
-              child: ListView.builder(
-                itemCount: messages.length,
-                itemBuilder: (context, index) {
-                  return messages[index];
-                },
+      body: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: SafeArea(
+          child: Column(
+            children: <Widget>[
+              Expanded(
+                child: ListView.builder(
+                  itemCount: messages.length,
+                  itemBuilder: (context, index) {
+                    return messages[index];
+                  },
+                ),
               ),
-            ),
-            TextInputWidget(
-              onSend: sendFixedContent,
-            ),
-          ],
+              TextInputWidget(
+                onSend: sendFixedContent,
+              ),
+            ],
+          ),
         ),
       ),
     );
