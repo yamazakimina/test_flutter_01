@@ -180,6 +180,7 @@ class _PartnersFindState extends State<PartnersFind> {
                         itemChanged: (SwipeItem item, int index) {
                           setState(() {
                             swipeStatus = "";
+                            cardStatuses[index].swipeStatus = "";
                           });
                         },
                         fillSpace: true,
@@ -277,8 +278,8 @@ class _PartnersFindState extends State<PartnersFind> {
           onPressed: () {
             setState(() {
               swipeStatus = "NOPE";
+              _matchEngine!.currentItem?.nope();
             });
-            _matchEngine!.currentItem?.nope();
           },
           shape: CircleBorder(),
           child: ShaderMask(
@@ -304,8 +305,8 @@ class _PartnersFindState extends State<PartnersFind> {
           onPressed: () {
             setState(() {
               swipeStatus = "LIKE";
+              _matchEngine!.currentItem?.like();
             });
-            _matchEngine!.currentItem?.like();
           },
           shape: CircleBorder(),
           child: ShaderMask(
