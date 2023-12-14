@@ -14,10 +14,13 @@ class TalksShow extends StatefulWidget {
 
 class _TalksShowState extends State<TalksShow> {
   List<Widget> messages = []; // チャットのメッセージを保持するリスト
+  ScrollController _scrollController =
+      ScrollController(); // 画面自動スクロールのコントローラー追加
 
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     messages.addAll([
       SizedBox(height: 20),
       rightBalloon(),
@@ -29,18 +32,43 @@ class _TalksShowState extends State<TalksShow> {
       LeftPhoto(),
       LeftVideoDisplay(),
     ]);
-  }
-
-  void sendFixedContent() {
-    setState(() {
-      messages.add(rightBalloon()); // rightBalloon ウィジェットを追加
-      messages.add(photo()); // photo ウィジェットを追加
-      messages.add(VideoDisplay());
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.delayed(Duration(milliseconds: 100), () {
+        _scrollToBottom();
+      });
     });
   }
 
   @override
+  void dispose() {
+    _scrollController.dispose(); // ここで解放
+    super.dispose();
+  }
+
+  void sendFixedContent() {
+    setState(() {
+      messages.add(rightBalloon());
+      messages.add(photo());
+      messages.add(VideoDisplay());
+    });
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      _scrollToBottom();
+    });
+  }
+
+  void _scrollToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.animateTo(
+        _scrollController.position.maxScrollExtent,
+        duration: Duration(milliseconds: 300),
+        curve: Curves.easeOut,
+      );
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     return Scaffold(
       appBar: appBar(context, widget.firstName, widget.imageUrl),
       body: Padding(
@@ -50,6 +78,7 @@ class _TalksShowState extends State<TalksShow> {
             children: <Widget>[
               Expanded(
                 child: ListView.builder(
+                  controller: _scrollController,
                   itemCount: messages.length,
                   itemBuilder: (context, index) {
                     return messages[index];
@@ -151,7 +180,7 @@ class TextInputWidget extends StatelessWidget {
                   keyboardType: TextInputType.multiline, //複数行のテキスト入力
                   maxLines: 5,
                   minLines: 1,
-                  autofocus: true,
+                  autofocus: false,
                   decoration: InputDecoration(
                     border: InputBorder.none,
                     hintText: 'メッセージを入力',

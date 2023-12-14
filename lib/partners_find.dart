@@ -55,6 +55,8 @@ class _PartnersFindState extends State<PartnersFind> {
                 setState(() {
                   swipeStatus = "LIKE";
                 });
+                _matchEngine!.currentItem?.like();
+
                 _scaffoldKey.currentState?.showSnackBar(const SnackBar(
                   content: Text("Liked "),
                   //  content: Text("Liked ${_names[i]}"),
@@ -65,6 +67,8 @@ class _PartnersFindState extends State<PartnersFind> {
                 setState(() {
                   swipeStatus = "NOPE";
                 });
+                _matchEngine!.currentItem?.nope();
+
                 _scaffoldKey.currentState?.showSnackBar(SnackBar(
                   content: Text("Nope ${usersData[i]['name']['first']}"),
                   duration: const Duration(milliseconds: 500),
@@ -128,12 +132,22 @@ class _PartnersFindState extends State<PartnersFind> {
                                 Positioned(
                                   top: 20,
                                   left: 20,
-                                  child: Text(
-                                    "Like",
-                                    style: TextStyle(
-                                      color: Colors.green, // お好みの色に調整
-                                      fontSize: 36,
-                                      fontWeight: FontWeight.bold,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.green,
+                                          width: 2), // 緑色の枠
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Text(
+                                      "LIKE",
+                                      style: TextStyle(
+                                        color: Colors.green, // お好みの色に調整
+                                        fontSize: 36,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
@@ -141,12 +155,21 @@ class _PartnersFindState extends State<PartnersFind> {
                                 Positioned(
                                   top: 20,
                                   right: 20,
-                                  child: Text(
-                                    "NOPE",
-                                    style: TextStyle(
-                                      color: Colors.red, // お好みの色に調整
-                                      fontSize: 36,
-                                      fontWeight: FontWeight.bold,
+                                  child: Container(
+                                    padding: EdgeInsets.symmetric(
+                                        horizontal: 10, vertical: 5),
+                                    decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: Colors.red, width: 2), // 赤色の枠
+                                      borderRadius: BorderRadius.circular(5),
+                                    ),
+                                    child: Text(
+                                      "NOPE",
+                                      style: TextStyle(
+                                        color: Colors.red, // お好みの色に調整
+                                        fontSize: 36,
+                                        fontWeight: FontWeight.bold,
+                                      ),
                                     ),
                                   ),
                                 ),
