@@ -82,29 +82,31 @@ class _MatchesIndexState extends State<MatchesIndex> {
               ),
             ),
           ),
-          const SizedBox(height: 8),
-          FutureBuilder<List<Map<String, String>>>(
-            future: userData,
-            builder: (context, snapshot) {
-              if (snapshot.connectionState == ConnectionState.waiting) {
-                return const CircularProgressIndicator();
-              } else if (snapshot.hasError) {
-                return Text('Error: ${snapshot.error}');
-              } else {
-                // 画像のみを表示
-                return SingleChildScrollView(
-                  scrollDirection: Axis.horizontal,
-                  child: Row(
-                    children: snapshot.data!
-                        .map((user) =>
-                            ImageOnlyMatch(imageUrl: user['imageUrl']!))
-                        .toList(),
-                  ),
-                );
-              }
-            },
+          Padding(
+    padding: const EdgeInsets.fromLTRB(16, 8, 8, 0),
+            child: FutureBuilder<List<Map<String, String>>>(
+              future: userData,
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return const CircularProgressIndicator();
+                } else if (snapshot.hasError) {
+                  return Text('Error: ${snapshot.error}');
+                } else {
+                  // 画像のみを表示
+                  return SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: snapshot.data!
+                          .map((user) =>
+                              ImageOnlyMatch(imageUrl: user['imageUrl']!))
+                          .toList(),
+                    ),
+                  );
+                }
+              },
+            ),
           ),
-          const SizedBox(height: 24),
+          const SizedBox(height: 16),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16.0),
             child: const Text(
