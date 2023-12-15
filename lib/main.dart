@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 // import 'homepage.dart';
 import 'partners_find.dart';
+// import 'partners_find.dart';
 
 void main() {
   runApp(const MyApp());

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
-import 'dart:convert';
-import 'package:http/http.dart' as http;
 import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'content.dart';
 import 'detailpage.dart';
 import 'matches_index.dart';
 import 'package:badges/badges.dart' as badges;
+import 'test.dart';
 
+// 初期設定
 class PartnersFind extends StatefulWidget {
   const PartnersFind({Key? key}) : super(key: key);
 
@@ -24,7 +24,6 @@ class CardStatus {
 //ランダムなユーザーを取得する
 class _PartnersFindState extends State<PartnersFind> {
   String swipeStatus = "";
-  final String url = "https://randomuser.me/api/?results=50";
   bool isLoading = true;
   late List usersData;
   final List<SwipeItem> _swipeItems = <SwipeItem>[];
@@ -33,24 +32,22 @@ class _PartnersFindState extends State<PartnersFind> {
       GlobalKey<ScaffoldMessengerState>();
   List<CardStatus> cardStatuses = [];
 
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
   Future getData() async {
-    var response = await http.get(
-      Uri.parse(url),
-      headers: {"Accept": "application/json"},
-    );
-
-//JSON形式のデータをデコード
-    List data = jsonDecode(response.body)['results'];
     setState(() {
-      usersData = data;
-
+      isLoading = true;
+      usersData = testUserData; // test.dart で定義されたテストデータ
       if (usersData.isNotEmpty) {
         //そのデータが空でない場合に処理
         for (int i = 0; i < usersData.length; i++) {
           cardStatuses.add(CardStatus());
           _swipeItems.add(SwipeItem(
-              // content: Content(text: _names[i], color: _colors[i]),
-              content: Content(text: usersData[i]['name']['first']),
+              content: Content(text: usersData[i]['name']),
               likeAction: () {
                 setState(() {
                   swipeStatus = "LIKE";
@@ -58,8 +55,7 @@ class _PartnersFindState extends State<PartnersFind> {
                 _matchEngine!.currentItem?.like();
 
                 _scaffoldKey.currentState?.showSnackBar(const SnackBar(
-                  content: Text("Liked "),
-                  //  content: Text("Liked ${_names[i]}"),
+                  content: Text("LIKE"),
                   duration: Duration(milliseconds: 500),
                 ));
               },
@@ -69,9 +65,9 @@ class _PartnersFindState extends State<PartnersFind> {
                 });
                 _matchEngine!.currentItem?.nope();
 
-                _scaffoldKey.currentState?.showSnackBar(SnackBar(
-                  content: Text("Nope ${usersData[i]['name']['first']}"),
-                  duration: const Duration(milliseconds: 500),
+                _scaffoldKey.currentState?.showSnackBar(const SnackBar(
+                  content: Text("NOPE"),
+                  duration: Duration(milliseconds: 500),
                 ));
               },
               onSlideUpdate: (SlideRegion? region) async {
@@ -97,12 +93,7 @@ class _PartnersFindState extends State<PartnersFind> {
     }); // setState
   } // getData
 
-  @override
-  void initState() {
-    super.initState();
-    getData();
-  }
-
+// メイン画面を作成
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -128,6 +119,8 @@ class _PartnersFindState extends State<PartnersFind> {
                               card(index),
                               shadow(context),
                               nameAndAge(index, context),
+
+                              // LIKEの文字表示
                               if (cardStatuses[index].swipeStatus == "LIKE")
                                 Positioned(
                                   top: 20,
@@ -137,20 +130,20 @@ class _PartnersFindState extends State<PartnersFind> {
                                         horizontal: 10, vertical: 5),
                                     decoration: BoxDecoration(
                                       border: Border.all(
-                                          color: Colors.green,
-                                          width: 2), // 緑色の枠
+                                          color: Colors.green, width: 2),
                                       borderRadius: BorderRadius.circular(5),
                                     ),
                                     child: Text(
                                       "LIKE",
                                       style: TextStyle(
-                                        color: Colors.green, // お好みの色に調整
+                                        color: Colors.green,
                                         fontSize: 36,
                                         fontWeight: FontWeight.bold,
                                       ),
                                     ),
                                   ),
                                 ),
+                              // NOPEの文字表示
                               if (cardStatuses[index].swipeStatus == "NOPE")
                                 Positioned(
                                   top: 20,
@@ -176,6 +169,8 @@ class _PartnersFindState extends State<PartnersFind> {
                             ],
                           );
                         },
+
+                        // スワイプした時の処理
                         onStackFinished: stackFinished,
                         itemChanged: (SwipeItem item, int index) {
                           setState(() {
@@ -187,16 +182,17 @@ class _PartnersFindState extends State<PartnersFind> {
                       ),
                     ),
                   ),
-                  // likedButton(),
                 ],
               ),
       ),
       bottomNavigationBar: bottomNavigationBar(context),
-      floatingActionButton: likedButton(), // 追加
-      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+      floatingActionButton: likedButton(), // いいねボタン（LIKE or NOPE）
+      floatingActionButtonLocation:
+          FloatingActionButtonLocation.centerDocked, //ボタンの位置
     );
   }
 
+// ボトムナビゲーションバーを作成
   SizedBox bottomNavigationBar(BuildContext context) {
     return SizedBox(
       height: 72,
@@ -246,7 +242,7 @@ class _PartnersFindState extends State<PartnersFind> {
                       animationDuration: Duration(milliseconds: 300),
                       badgeContent:
                           Text('3', style: TextStyle(color: Colors.white)),
-                      child: Container(), // Badgeがない時にも空のコンテナを置いておくとレイアウトが崩れません
+                      child: Container(), // Badgeがない時にも空のコンテナを置いておくとレイアウトが崩れない
                       badgeColor: Colors.pink,
                     ),
                   ),
@@ -268,6 +264,7 @@ class _PartnersFindState extends State<PartnersFind> {
     );
   }
 
+// いいねボタン（LIKE or NOPE）を作成
   Row likedButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -364,9 +361,9 @@ class _PartnersFindState extends State<PartnersFind> {
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Text(
-                      usersData[index]['name']['first'] +
+                      usersData[index]['name'] +
                           ", " +
-                          usersData[index]['dob']['age'].toString(),
+                          usersData[index]['age'].toString(),
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       softWrap: false,
@@ -382,9 +379,9 @@ class _PartnersFindState extends State<PartnersFind> {
                   child: Padding(
                     padding: const EdgeInsets.all(4.0),
                     child: Text(
-                      usersData[index]['location']['city'] +
+                      usersData[index]['city'] +
                           ", " +
-                          usersData[index]['location']['country'],
+                          usersData[index]['country'],
                       overflow: TextOverflow.ellipsis,
                       maxLines: 1,
                       softWrap: false,
@@ -407,15 +404,15 @@ class _PartnersFindState extends State<PartnersFind> {
                     context,
                     MaterialPageRoute(
                       builder: (context) => DetailsPage(
-                        name: usersData[index]['name']['first'],
-                        age: usersData[index]['dob']['age'].toString(),
+                        name: usersData[index]['name'],
+                        age: usersData[index]['age'].toString(),
                         gender: usersData[index]['gender'],
-                        city: usersData[index]['location']['city'],
-                        state: usersData[index]['location']['state'],
-                        country: usersData[index]['location']['country'],
+                        city: usersData[index]['city'],
+                        state: usersData[index]['state'],
+                        country: usersData[index]['country'],
                         phone: usersData[index]['phone'].toString(),
                         email: usersData[index]['email'],
-                        avatar: usersData[index]['picture']['large'],
+                        avatar: usersData[index]['picture'],
                       ),
                     ),
                   );
@@ -443,6 +440,7 @@ class _PartnersFindState extends State<PartnersFind> {
     );
   }
 
+// 画像の影を作成
   Align shadow(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
@@ -466,6 +464,7 @@ class _PartnersFindState extends State<PartnersFind> {
     );
   }
 
+// 画像を作成
   Card card(int index) {
     return Card(
       margin: const EdgeInsets.all(0),
@@ -479,9 +478,8 @@ class _PartnersFindState extends State<PartnersFind> {
         padding: const EdgeInsets.all(0),
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12.0),
-          child: Image.network(
-            // "https://images.pexels.com/photos/3532552/pexels-photo-3532552.jpeg?cs=srgb&dl=pexels-hitesh-choudhary-3532552.jpg&fm=jpg",
-            usersData[index]['picture']['large'],
+          child: Image.asset(
+            usersData[index]['picture'],
             fit: BoxFit.cover, // 画像を横幅いっぱいに表示
             width: double.infinity, // 横幅いっぱいに広げる
             height: double.infinity, // 縦幅いっぱいに広げる
@@ -491,6 +489,7 @@ class _PartnersFindState extends State<PartnersFind> {
     );
   }
 
+// アプリバーを作成
   AppBar appBar() {
     return AppBar(
       elevation: 0.0,
