@@ -2,21 +2,26 @@ import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
+// TalkShowクラスを作成
 class TalksShow extends StatefulWidget {
-  final String firstName; // ユーザーのファーストネーム
-  final String imageUrl; // ユーザーの画像URL
+  final String firstName;
+  final String imageUrl;
 
   const TalksShow({Key? key, required this.firstName, required this.imageUrl})
       : super(key: key);
+  // 状態を保持するためにStateクラスを作成
   @override
-  _TalksShowState createState() => _TalksShowState(); // createState メソッドの実装
+  _TalksShowState createState() => _TalksShowState();
 }
 
+// Stateクラスを作成
 class _TalksShowState extends State<TalksShow> {
-  List<Widget> messages = []; // チャットのメッセージを保持するリスト
-  ScrollController _scrollController =
-      ScrollController(); // 画面自動スクロールのコントローラー追加
+  // メッセージを保持するためのリストを作成
+  List<Widget> messages = [];
+  // スクロールを制御するためのコントローラーを作成
+  ScrollController _scrollController = ScrollController();
 
+// 状態を保持するためにinitStateを使用
   @override
   void initState() {
     super.initState();
@@ -32,30 +37,33 @@ class _TalksShowState extends State<TalksShow> {
       LeftPhoto(),
       LeftVideoDisplay(),
     ]);
+    // 画面が描画された後、一番下に移動
     WidgetsBinding.instance.addPostFrameCallback((_) {
-      Future.delayed(Duration(milliseconds: 100), () {
-        _scrollToBottom();
-      });
+      _jumpToBottom();
     });
   }
 
+// scrollControllerを解放
   @override
   void dispose() {
-    _scrollController.dispose(); // ここで解放
+    _scrollController.dispose();
     super.dispose();
   }
 
+// メッセージを追加するメソッドを作成
   void sendFixedContent() {
     setState(() {
       messages.add(rightBalloon());
       messages.add(photo());
       messages.add(VideoDisplay());
     });
+    // 画面が描画された後にスクロールを一番下に移動
     WidgetsBinding.instance.addPostFrameCallback((_) {
       _scrollToBottom();
     });
   }
 
+// スクロールを一番下に移動するメソッドを作成
   void _scrollToBottom() {
     if (_scrollController.hasClients) {
       _scrollController.animateTo(
@@ -66,9 +74,16 @@ class _TalksShowState extends State<TalksShow> {
     }
   }
 
+// 画面下に移動するメソッドを作成
+  void _jumpToBottom() {
+    if (_scrollController.hasClients) {
+      _scrollController.jumpTo(_scrollController.position.maxScrollExtent);
+    }
+  }
+
+// 画面を描画
   @override
   Widget build(BuildContext context) {
-    WidgetsBinding.instance.addPostFrameCallback((_) => _scrollToBottom());
     return Scaffold(
       appBar: appBar(context, widget.firstName, widget.imageUrl),
       body: Padding(
@@ -96,17 +111,18 @@ class _TalksShowState extends State<TalksShow> {
   }
 }
 
+// AppBarを作成
 AppBar appBar(BuildContext context, String firstName, String imageUrl) {
   return AppBar(
     backgroundColor: Theme.of(context).canvasColor,
     elevation: .6,
-    toolbarHeight: 80, // AppBarの高さを調整
+    toolbarHeight: 80,
     title: Column(
       mainAxisAlignment: MainAxisAlignment.center,
       children: [
         ClipOval(
           child: Image.network(
-            imageUrl, // 画像URLを使用
+            imageUrl,
             width: 50,
             height: 50,
             fit: BoxFit.cover,
@@ -114,7 +130,7 @@ AppBar appBar(BuildContext context, String firstName, String imageUrl) {
         ),
         const SizedBox(height: 4),
         Text(
-          firstName, // ファーストネームを表示
+          firstName,
           style: TextStyle(
             fontSize: 16.0,
             color: Colors.grey,
@@ -126,6 +142,7 @@ AppBar appBar(BuildContext context, String firstName, String imageUrl) {
   );
 }
 
+// メッセージの左側の吹き出しを作成
 Padding leftBalloon(String imageUrl) {
   return Padding(
     padding: const EdgeInsets.only(bottom: 20),
@@ -159,6 +176,37 @@ Padding leftBalloon(String imageUrl) {
   );
 }
 
+// メッセージの右側の吹き出しを作成
+class rightBalloon extends StatelessWidget {
+  const rightBalloon({Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 20),
+      child: Align(
+        alignment: Alignment.centerRight,
+        child: Container(
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+          decoration: BoxDecoration(
+            color: Colors.blue,
+            borderRadius: BorderRadius.only(
+              topLeft: Radius.circular(20),
+              topRight: Radius.circular(20),
+              bottomLeft: Radius.circular(20),
+            ),
+          ),
+          child: Text(
+            'こんにちは。今日の夜会えますか？',
+            style: TextStyle(color: Colors.white),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// 入力欄を作成
 class TextInputWidget extends StatelessWidget {
   final VoidCallback onSend;
 
@@ -213,35 +261,7 @@ class TextInputWidget extends StatelessWidget {
   }
 }
 
-class rightBalloon extends StatelessWidget {
-  const rightBalloon({Key? key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.only(bottom: 20),
-      child: Align(
-        alignment: Alignment.centerRight,
-        child: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-          decoration: BoxDecoration(
-            color: Colors.blue,
-            borderRadius: BorderRadius.only(
-              topLeft: Radius.circular(20),
-              topRight: Radius.circular(20),
-              bottomLeft: Radius.circular(20),
-            ),
-          ),
-          child: Text(
-            'こんにちは。今日の夜会えますか？',
-            style: TextStyle(color: Colors.white),
-          ),
-        ),
-      ),
-    );
-  }
-}
-
+// 右の画像を表示するメソッドを作成
 class photo extends StatelessWidget {
   const photo({
     super.key,
@@ -264,6 +284,7 @@ class photo extends StatelessWidget {
   }
 }
 
+// 右のビデオを表示するメソッドを作成
 class VideoDisplay extends StatefulWidget {
   const VideoDisplay({Key? key}) : super(key: key);
 
@@ -287,6 +308,7 @@ class _VideoDisplayState extends State<VideoDisplay> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
+      // タップした時にビデオを再生する
       onTap: () async {
         _controller.pause();
         await Navigator.of(context).push(MaterialPageRoute(
@@ -294,6 +316,7 @@ class _VideoDisplayState extends State<VideoDisplay> {
         ));
         _controller.play();
       },
+      // ビデオが再生中かどうかを判定するフラグを作成
       child: Padding(
         padding: const EdgeInsets.only(bottom: 20),
         child: Align(
@@ -310,6 +333,7 @@ class _VideoDisplayState extends State<VideoDisplay> {
                         child: VideoPlayer(_controller),
                       ),
                       if (!_isPlaying)
+                        // 再生ボタンを表示
                         Icon(
                           Icons.play_circle_outline,
                           color: Colors.white,
@@ -331,6 +355,7 @@ class _VideoDisplayState extends State<VideoDisplay> {
   }
 }
 
+// ビデオを全画面で表示するクラスを作成
 class FullScreenVideoPlayer extends StatefulWidget {
   final VideoPlayerController controller;
 
@@ -355,6 +380,7 @@ class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> {
     );
   }
 
+// 画面を描画
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -379,6 +405,7 @@ class _FullScreenVideoPlayerState extends State<FullScreenVideoPlayer> {
   }
 }
 
+// 左の画像を表示するメソッドを作成
 class LeftPhoto extends StatelessWidget {
   const LeftPhoto({Key? key}) : super(key: key);
 
@@ -389,7 +416,7 @@ class LeftPhoto extends StatelessWidget {
       child: Align(
         alignment: Alignment.centerLeft,
         child: Image.asset(
-          'assets/img/1.jpg', // 画像パスを適切に設定
+          'assets/img/2.jpg', // 画像パスを適切に設定
           width: 250,
           height: 150,
           fit: BoxFit.cover,
@@ -399,6 +426,7 @@ class LeftPhoto extends StatelessWidget {
   }
 }
 
+// 左のビデオを表示するメソッドを作成
 class LeftVideoDisplay extends StatefulWidget {
   const LeftVideoDisplay({Key? key}) : super(key: key);
 
@@ -408,7 +436,7 @@ class LeftVideoDisplay extends StatefulWidget {
 
 class _LeftVideoDisplayState extends State<LeftVideoDisplay> {
   late VideoPlayerController _controller;
-  bool _isPlaying = false; // 追加: ビデオの再生状態を追跡する変数
+  bool _isPlaying = false;
 
   @override
   void initState() {
@@ -416,7 +444,6 @@ class _LeftVideoDisplayState extends State<LeftVideoDisplay> {
     _controller = VideoPlayerController.asset('assets/video/1.mp4')
       ..initialize().then((_) {
         setState(() {});
-        // ビデオの再生状態のリスナーを追加
         _controller.addListener(() {
           final isPlaying = _controller.value.isPlaying;
           if (isPlaying != _isPlaying) {

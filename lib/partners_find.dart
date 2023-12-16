@@ -7,6 +7,8 @@ import 'detailpage.dart';
 import 'matches_index.dart';
 import 'package:badges/badges.dart' as badges;
 import 'test.dart';
+// import 'package:video_player/video_player.dart';
+// import 'package:chewie/chewie.dart';
 
 // 初期設定
 class PartnersFind extends StatefulWidget {
