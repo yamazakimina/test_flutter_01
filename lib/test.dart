@@ -1,7 +1,7 @@
-List<Map<String, String>> testUserData = [
+List<Map<String, dynamic>> testUserData = [
   {
     'name': 'Alice',
-    'picture': 'assets/img/1.jpg',
+    'pictures': ['assets/img/1.jpg', 'assets/img/2.jpg', 'assets/img/3.jpg'],
     'age': '25',
     'city': 'Tokyo',
     'country': 'Japan',
@@ -12,7 +12,7 @@ List<Map<String, String>> testUserData = [
   },
   {
     'name': 'Alice',
-    'picture': 'assets/img/1.jpg',
+    'pictures': ['assets/img/1.jpg', 'assets/img/2.jpg', 'assets/img/3.jpg'],
     'age': '25',
     'city': 'Tokyo',
     'country': 'Japan',
@@ -23,7 +23,7 @@ List<Map<String, String>> testUserData = [
   },
   {
     'name': 'Alice',
-    'picture': 'assets/img/1.jpg',
+    'pictures': ['assets/img/1.jpg', 'assets/img/2.jpg', 'assets/img/3.jpg'],
     'age': '25',
     'city': 'Tokyo',
     'country': 'Japan',
@@ -34,7 +34,7 @@ List<Map<String, String>> testUserData = [
   },
   {
     'name': 'Alice',
-    'picture': 'assets/img/1.jpg',
+    'pictures': ['assets/img/1.jpg', 'assets/img/2.jpg', 'assets/img/3.jpg'],
     'age': '25',
     'city': 'Tokyo',
     'country': 'Japan',
@@ -45,7 +45,7 @@ List<Map<String, String>> testUserData = [
   },
   {
     'name': 'Alice',
-    'picture': 'assets/img/1.jpg',
+    'pictures': ['assets/img/1.jpg', 'assets/img/2.jpg', 'assets/img/3.jpg'],
     'age': '25',
     'city': 'Tokyo',
     'country': 'Japan',
@@ -56,7 +56,7 @@ List<Map<String, String>> testUserData = [
   },
   {
     'name': 'Alice',
-    'picture': 'assets/img/1.jpg',
+    'pictures': ['assets/img/1.jpg', 'assets/img/2.jpg', 'assets/img/3.jpg'],
     'age': '25',
     'city': 'Tokyo',
     'country': 'Japan',
@@ -67,7 +67,7 @@ List<Map<String, String>> testUserData = [
   },
   {
     'name': 'Alice',
-    'picture': 'assets/img/1.jpg',
+    'pictures': ['assets/img/1.jpg', 'assets/img/2.jpg', 'assets/img/3.jpg'],
     'age': '25',
     'city': 'Tokyo',
     'country': 'Japan',
@@ -78,7 +78,7 @@ List<Map<String, String>> testUserData = [
   },
   {
     'name': 'Alice',
-    'picture': 'assets/img/1.jpg',
+    'pictures': ['assets/img/1.jpg', 'assets/img/2.jpg', 'assets/img/3.jpg'],
     'age': '25',
     'city': 'Tokyo',
     'country': 'Japan',
@@ -89,7 +89,7 @@ List<Map<String, String>> testUserData = [
   },
   {
     'name': 'Alice',
-    'picture': 'assets/img/1.jpg',
+    'pictures': ['assets/img/1.jpg', 'assets/img/2.jpg', 'assets/img/3.jpg'],
     'age': '25',
     'city': 'Tokyo',
     'country': 'Japan',
@@ -100,7 +100,7 @@ List<Map<String, String>> testUserData = [
   },
   {
     'name': 'Alice',
-    'picture': 'assets/img/1.jpg',
+    'pictures': ['assets/img/1.jpg', 'assets/img/2.jpg', 'assets/img/3.jpg'],
     'age': '25',
     'city': 'Tokyo',
     'country': 'Japan',

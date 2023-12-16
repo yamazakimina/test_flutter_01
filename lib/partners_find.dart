@@ -31,6 +31,7 @@ class _PartnersFindState extends State<PartnersFind> {
   final GlobalKey<ScaffoldMessengerState> _scaffoldKey =
       GlobalKey<ScaffoldMessengerState>();
   List<CardStatus> cardStatuses = [];
+  List<int> currentImageIndices = []; // 画像のインデックスを格納するリスト
 
   @override
   void initState() {
@@ -38,10 +39,20 @@ class _PartnersFindState extends State<PartnersFind> {
     getData();
   }
 
+  void nextImage(int index) {
+    setState(() {
+      // 現在の画像のインデックスを更新
+      currentImageIndices[index] = ((currentImageIndices[index] + 1) %
+          usersData[index]['pictures'].length) as int;
+    });
+  }
+
   Future getData() async {
     setState(() {
       isLoading = true;
       usersData = testUserData; // test.dart で定義されたテストデータ
+      // usersDataが更新されたら、currentImageIndicesも更新
+      currentImageIndices = List.filled(usersData.length, 0);
       if (usersData.isNotEmpty) {
         //そのデータが空でない場合に処理
         for (int i = 0; i < usersData.length; i++) {
@@ -100,7 +111,7 @@ class _PartnersFindState extends State<PartnersFind> {
       extendBody: true,
       backgroundColor: Colors.white,
       key: _scaffoldKey,
-      appBar: appBar(),
+      appBar: appBar(context),
       body: Center(
         child: isLoading
             ? const CircularProgressIndicator()
@@ -334,7 +345,7 @@ class _PartnersFindState extends State<PartnersFind> {
   stackFinished() {
     _scaffoldKey.currentState!.showSnackBar(const SnackBar(
       content: Text("Stack Finished"),
-      duration: Duration(milliseconds: 500),
+      duration: Duration(milliseconds: 5000),
     ));
   }
 
@@ -466,31 +477,55 @@ class _PartnersFindState extends State<PartnersFind> {
 
 // 画像を作成
   Card card(int index) {
+    var user = usersData[index];
+    var currentImageIndex = currentImageIndices[index];
+    var pictureCount = user['pictures'].length as int;
     return Card(
-      margin: const EdgeInsets.all(0),
-      shadowColor: Colors.grey,
-      elevation: 12.0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12.0),
-      ),
-      color: Colors.white,
-      child: Padding(
-        padding: const EdgeInsets.all(0),
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12.0),
-          child: Image.asset(
-            usersData[index]['picture'],
-            fit: BoxFit.cover, // 画像を横幅いっぱいに表示
-            width: double.infinity, // 横幅いっぱいに広げる
-            height: double.infinity, // 縦幅いっぱいに広げる
-          ),
+      // Cardウィジェットでラップ
+      child: GestureDetector(
+        onTap: () => nextImage(index),
+        child: Stack(
+          children: [
+            // 画像の表示
+            Image.asset(
+              user['pictures'][currentImageIndex],
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+            ),
+            // インジケーターの表示
+            Positioned(
+              top: 10,
+              left: 0,
+              right: 0,
+              child: Container(
+                margin: EdgeInsets.symmetric(horizontal: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: List.generate(pictureCount, (indicatorIndex) {
+                    return Expanded(
+                      child: Container(
+                        height: 4,
+                        margin: EdgeInsets.symmetric(horizontal: 2),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(2),
+                          color: currentImageIndex == indicatorIndex
+                              ? Colors.white
+                              : Colors.black.withOpacity(0.5),
+                        ),
+                      ),
+                    );
+                  }),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );
   }
 
-// アプリバーを作成
-  AppBar appBar() {
+  AppBar appBar(BuildContext context) {
     return AppBar(
       elevation: 0.0,
       backgroundColor: Theme.of(context).canvasColor,
@@ -514,4 +549,6 @@ class _PartnersFindState extends State<PartnersFind> {
       ),
     );
   }
+
+// アプリバーを作成
 }
