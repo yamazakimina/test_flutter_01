@@ -25,7 +25,6 @@ class _TalksShowState extends State<TalksShow> {
   @override
   void initState() {
     super.initState();
-    _scrollController = ScrollController();
     messages.addAll([
       SizedBox(height: 20),
       rightBalloon(),
