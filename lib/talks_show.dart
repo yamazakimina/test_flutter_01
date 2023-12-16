@@ -25,12 +25,13 @@ class _TalksShowState extends State<TalksShow> {
   @override
   void initState() {
     super.initState();
+    _scrollController = ScrollController();
     messages.addAll([
       SizedBox(height: 20),
       rightBalloon(),
       leftBalloon(widget.imageUrl),
       rightBalloon(),
-      photo(),
+      Photo(),
       VideoDisplay(),
       leftBalloon(widget.imageUrl),
       LeftPhoto(),
@@ -53,7 +54,7 @@ class _TalksShowState extends State<TalksShow> {
   void sendFixedContent() {
     setState(() {
       messages.add(rightBalloon());
-      messages.add(photo());
+      messages.add(Photo());
       messages.add(VideoDisplay());
     });
     // 画面が描画された後にスクロールを一番下に移動
@@ -261,10 +262,8 @@ class TextInputWidget extends StatelessWidget {
 }
 
 // 右の画像を表示するメソッドを作成
-class photo extends StatelessWidget {
-  const photo({
-    super.key,
-  });
+class Photo extends StatelessWidget {
+  const Photo({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -272,11 +271,39 @@ class photo extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 20),
       child: Align(
         alignment: Alignment.centerRight,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => FullScreenImage(),
+            ));
+          },
+          child: Image.asset(
+            'assets/img/1.jpg',
+            width: 250,
+            height: 150,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// 右の画像を全画面で表示するクラスを作成
+class FullScreenImage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: Center(
         child: Image.asset(
           'assets/img/1.jpg',
-          width: 250,
-          height: 150,
-          fit: BoxFit.cover,
+          fit: BoxFit.contain,
         ),
       ),
     );
@@ -414,11 +441,43 @@ class LeftPhoto extends StatelessWidget {
       padding: const EdgeInsets.only(bottom: 20),
       child: Align(
         alignment: Alignment.centerLeft,
+        child: GestureDetector(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+              builder: (_) => FullScreenImage2(imagePath: 'assets/img/2.jpg'),
+            ));
+          },
+          child: Image.asset(
+            'assets/img/2.jpg', // 画像パスを適切に設定
+            width: 250,
+            height: 150,
+            fit: BoxFit.cover,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+// 左の画像を全画面で表示するクラスを作成
+class FullScreenImage2 extends StatelessWidget {
+  final String imagePath;
+
+  const FullScreenImage2({Key? key, required this.imagePath}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back),
+          onPressed: () => Navigator.of(context).pop(),
+        ),
+      ),
+      body: Center(
         child: Image.asset(
-          'assets/img/2.jpg', // 画像パスを適切に設定
-          width: 250,
-          height: 150,
-          fit: BoxFit.cover,
+          imagePath,
+          fit: BoxFit.contain,
         ),
       ),
     );
