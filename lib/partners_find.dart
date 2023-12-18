@@ -7,8 +7,8 @@ import 'detailpage.dart';
 import 'matches_index.dart';
 import 'package:badges/badges.dart' as badges;
 import 'test.dart';
-// import 'package:video_player/video_player.dart';
-// import 'package:chewie/chewie.dart';
+import 'package:video_player/video_player.dart';
+import 'package:chewie/chewie.dart';
 
 // 初期設定
 class PartnersFind extends StatefulWidget {
@@ -34,6 +34,8 @@ class _PartnersFindState extends State<PartnersFind> {
       GlobalKey<ScaffoldMessengerState>();
   List<CardStatus> cardStatuses = [];
   List<int> currentImageIndices = []; // 画像のインデックスを格納するリスト
+  List<int> currentVideoIndices = []; // 動画のインデックスを格納するリスト
+  List<int> currentMediaIndices = []; // 画像と動画のインデックスを格納するリスト
 
   @override
   void initState() {
@@ -49,12 +51,41 @@ class _PartnersFindState extends State<PartnersFind> {
     });
   }
 
+  void nextVideo(int index) {
+    setState(() {
+      currentVideoIndices[index] = ((currentVideoIndices[index] + 1) %
+          usersData[index]['videos'].length) as int;
+    });
+  }
+
+  void nextMedia(int index) {
+    setState(() {
+      int totalPictureCount = usersData[index]['pictures'].length;
+      int totalVideoCount = usersData[index]['videos'].length;
+      int totalMediaCount = totalPictureCount + totalVideoCount;
+
+      currentMediaIndices[index] =
+          (currentMediaIndices[index] + 1) % totalMediaCount;
+
+      if (currentMediaIndices[index] < totalPictureCount) {
+        // 現在のメディアが画像の場合
+        currentImageIndices[index] = currentMediaIndices[index];
+      } else {
+        // 現在のメディアが動画の場合
+        currentVideoIndices[index] =
+            (currentMediaIndices[index] - totalPictureCount) % totalVideoCount;
+      }
+    });
+  }
+
   Future getData() async {
     setState(() {
       isLoading = true;
       usersData = testUserData; // test.dart で定義されたテストデータ
       // usersDataが更新されたら、currentImageIndicesも更新
       currentImageIndices = List.filled(usersData.length, 0);
+      currentVideoIndices = List.filled(usersData.length, 0);
+      currentMediaIndices = List.filled(usersData.length, 0);
       if (usersData.isNotEmpty) {
         //そのデータが空でない場合に処理
         for (int i = 0; i < usersData.length; i++) {
@@ -477,24 +508,32 @@ class _PartnersFindState extends State<PartnersFind> {
     );
   }
 
-// 画像を作成
   Card card(int index) {
     var user = usersData[index];
-    var currentImageIndex = currentImageIndices[index];
-    var pictureCount = user['pictures'].length as int;
+    var currentMediaIndex = currentMediaIndices[index];
+    var totalMediaCount = user['pictures'].length + user['videos'].length;
+    var currentPictureIndex = currentImageIndices[index];
+    var currentVideoIndex = currentVideoIndices[index];
+
+    Widget displayMedia;
+    if (currentMediaIndex < user['pictures'].length) {
+      displayMedia = Image.asset(
+        user['pictures'][currentPictureIndex],
+        fit: BoxFit.cover,
+        width: double.infinity,
+        height: double.infinity,
+      );
+    } else {
+      displayMedia = VideoDisplay(
+          key: UniqueKey(), videoUrl: user['videos'][currentVideoIndex]);
+    }
+
     return Card(
-      // Cardウィジェットでラップ
       child: GestureDetector(
-        onTap: () => nextImage(index),
+        onTap: () => nextMedia(index),
         child: Stack(
           children: [
-            // 画像の表示
-            Image.asset(
-              user['pictures'][currentImageIndex],
-              fit: BoxFit.cover,
-              width: double.infinity,
-              height: double.infinity,
-            ),
+            displayMedia,
             // インジケーターの表示
             Positioned(
               top: 10,
@@ -504,14 +543,14 @@ class _PartnersFindState extends State<PartnersFind> {
                 margin: EdgeInsets.symmetric(horizontal: 10),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: List.generate(pictureCount, (indicatorIndex) {
+                  children: List.generate(totalMediaCount, (indicatorIndex) {
                     return Expanded(
                       child: Container(
                         height: 4,
                         margin: EdgeInsets.symmetric(horizontal: 2),
                         decoration: BoxDecoration(
                           borderRadius: BorderRadius.circular(2),
-                          color: currentImageIndex == indicatorIndex
+                          color: currentMediaIndex == indicatorIndex
                               ? Colors.white
                               : Colors.black.withOpacity(0.5),
                         ),
@@ -551,6 +590,49 @@ class _PartnersFindState extends State<PartnersFind> {
       ),
     );
   }
+}
 
-// アプリバーを作成
+class VideoDisplay extends StatefulWidget {
+  final String videoUrl;
+
+  const VideoDisplay({Key? key, required this.videoUrl}) : super(key: key);
+
+  @override
+  _VideoDisplayState createState() => _VideoDisplayState();
+}
+
+class _VideoDisplayState extends State<VideoDisplay> {
+  late VideoPlayerController _videoController;
+  ChewieController? _chewieController;
+
+  @override
+  void initState() {
+    super.initState();
+    _videoController = VideoPlayerController.asset(widget.videoUrl)
+      ..initialize().then((_) {
+        setState(() {
+          _chewieController = ChewieController(
+              videoPlayerController: _videoController,
+              autoPlay: false,
+              looping: true,
+              showControls: false);
+        });
+      });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return _chewieController != null
+        ? Chewie(
+            controller: _chewieController!,
+          )
+        : Center(child: CircularProgressIndicator());
+  }
+
+  @override
+  void dispose() {
+    _videoController.dispose();
+    _chewieController?.dispose();
+    super.dispose();
+  }
 }
