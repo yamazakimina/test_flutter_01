@@ -375,11 +375,23 @@ class _PartnersFindState extends State<PartnersFind> {
     print("item: ${item.content.text}, index: $index");
   }
 
-  stackFinished() {
-    _scaffoldKey.currentState!.showSnackBar(const SnackBar(
-      content: Text("Stack Finished"),
-      duration: Duration(milliseconds: 5000),
-    ));
+  void stackFinished() {
+    setState(() {
+      // データリストのインデックスをリセット
+      currentMediaIndices = List.filled(usersData.length, 0);
+      currentImageIndices = List.filled(usersData.length, 0);
+      currentVideoIndices = List.filled(usersData.length, 0);
+
+      // SwipeItemsをリセットして再構築
+      _swipeItems.clear();
+      for (int i = 0; i < usersData.length; i++) {
+        _swipeItems.add(SwipeItem(
+          content: Content(text: usersData[i]['name']),
+        ));
+      }
+
+      _matchEngine = MatchEngine(swipeItems: _swipeItems);
+    });
   }
 
   Align nameAndAge(int index, BuildContext context) {
