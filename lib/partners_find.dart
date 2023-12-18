@@ -524,8 +524,7 @@ class _PartnersFindState extends State<PartnersFind> {
         height: double.infinity,
       );
     } else {
-      displayMedia = VideoDisplay(
-          key: UniqueKey(), videoUrl: user['videos'][currentVideoIndex]);
+      displayMedia = VideoDisplay(videoUrl: user['videos'][currentVideoIndex]);
     }
 
     return Card(
@@ -604,28 +603,48 @@ class VideoDisplay extends StatefulWidget {
 class _VideoDisplayState extends State<VideoDisplay> {
   late VideoPlayerController _videoController;
   ChewieController? _chewieController;
+  bool _isPlayerInitialized = false;
 
   @override
   void initState() {
     super.initState();
+    _initializeVideoPlayer();
+  }
+
+  void _initializeVideoPlayer() {
     _videoController = VideoPlayerController.asset(widget.videoUrl)
       ..initialize().then((_) {
         setState(() {
+          _videoController.setVolume(0.0);
+          _isPlayerInitialized = true;
           _chewieController = ChewieController(
-              videoPlayerController: _videoController,
-              autoPlay: false,
-              looping: true,
-              showControls: false);
+            videoPlayerController: _videoController,
+            autoPlay: true,
+            looping: true,
+            showControls: false,
+          );
+        });
+      }).catchError((error) {
+        print('Video player initialization error: $error');
+        setState(() {
+          _isPlayerInitialized = false;
         });
       });
   }
 
   @override
+  void didUpdateWidget(VideoDisplay oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (widget.videoUrl != oldWidget.videoUrl) {
+      _videoController.dispose();
+      _initializeVideoPlayer();
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return _chewieController != null
-        ? Chewie(
-            controller: _chewieController!,
-          )
+    return _isPlayerInitialized
+        ? Chewie(controller: _chewieController!)
         : Center(child: CircularProgressIndicator());
   }
 
