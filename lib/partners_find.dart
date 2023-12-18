@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'content.dart';
+import 'me.dart';
 import 'user_show.dart';
 import 'matches_index.dart';
 import 'package:badges/badges.dart' as badges;
@@ -295,7 +296,26 @@ class _PartnersFindState extends State<PartnersFind> {
             ),
             BottomNavigationBarItem(
               label: "Mypage",
-              icon: Container(
+              icon: GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => Me(
+                        name: testUserData[0]['name'],
+                        age: testUserData[0]['age'],
+                        gender: testUserData[0]['gender'],
+                        city: testUserData[0]['city'],
+                        state: testUserData[0]['state'],
+                        country: testUserData[0]['country'],
+                        phone: testUserData[0]['phone'],
+                        email: testUserData[0]['email'],
+                        avatar: testUserData[0]['pictures'],
+                        video: testUserData[0]['videos'],
+                      ),
+                    ),
+                  );
+                },
                 child: Icon(
                   Icons.person,
                   color: Colors.grey,

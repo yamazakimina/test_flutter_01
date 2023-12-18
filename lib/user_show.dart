@@ -19,10 +19,10 @@ class UserShow extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _DetailsPageState createState() => _DetailsPageState();
+  _UserShowState createState() => _UserShowState();
 }
 
-class _DetailsPageState extends State<UserShow> {
+class _UserShowState extends State<UserShow> {
   int currentMediaIndex = 0;
 
   void nextMedia() {
