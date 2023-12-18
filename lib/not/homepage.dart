@@ -5,7 +5,7 @@ import 'package:http/http.dart' as http;
 import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import '../content.dart';
-import '../detailpage.dart';
+import '../user_show.dart';
 import '../matches_index.dart';
 
 class HomePage extends StatefulWidget {
@@ -266,7 +266,7 @@ class _HomePageState extends State<HomePage> {
                                               context,
                                               MaterialPageRoute(
                                                 builder: (context) =>
-                                                    DetailsPage(
+                                                    UserShow(
                                                   name: usersData[index]['name']
                                                       ['first'],
                                                   age: usersData[index]['dob']

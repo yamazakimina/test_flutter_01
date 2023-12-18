@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 
-class DetailsPage extends StatefulWidget {
+class UserShow extends StatefulWidget {
   final String name, gender, city, state, country, email, age, phone;
   final List<String> avatar, video;
 
-  const DetailsPage({
+  const UserShow({
     Key? key,
     required this.name,
     required this.age,
@@ -22,7 +22,7 @@ class DetailsPage extends StatefulWidget {
   _DetailsPageState createState() => _DetailsPageState();
 }
 
-class _DetailsPageState extends State<DetailsPage> {
+class _DetailsPageState extends State<UserShow> {
   int currentMediaIndex = 0;
 
   void nextMedia() {
@@ -74,7 +74,7 @@ class photoDetails extends StatelessWidget {
     required this.widget,
   });
 
-  final DetailsPage widget;
+  final UserShow widget;
 
   @override
   Widget build(BuildContext context) {

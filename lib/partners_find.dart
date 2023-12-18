@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:swipe_cards/draggable_card.dart';
 import 'package:swipe_cards/swipe_cards.dart';
 import 'content.dart';
-import 'detailpage.dart';
+import 'user_show.dart';
 import 'matches_index.dart';
 import 'package:badges/badges.dart' as badges;
 import 'test.dart';
@@ -459,7 +459,7 @@ class _PartnersFindState extends State<PartnersFind> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => DetailsPage(
+                      builder: (context) => UserShow(
                         name: usersData[index]['name'],
                         age: usersData[index]['age'].toString(),
                         gender: usersData[index]['gender'],
