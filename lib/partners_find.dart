@@ -468,7 +468,8 @@ class _PartnersFindState extends State<PartnersFind> {
                         country: usersData[index]['country'],
                         phone: usersData[index]['phone'].toString(),
                         email: usersData[index]['email'],
-                        avatar: usersData[index]['picture'],
+                        avatar: usersData[index]['pictures'],
+                        video: usersData[index]['videos'],
                       ),
                     ),
                   );

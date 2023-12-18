@@ -286,7 +286,9 @@ class _HomePageState extends State<HomePage> {
                                                   email: usersData[index]
                                                       ['email'],
                                                   avatar: usersData[index]
-                                                      ['picture']['large'],
+                                                      ['pictures'],
+                                                  video: usersData[index]
+                                                      ['videos'],
                                                 ),
                                               ),
                                             );

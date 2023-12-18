@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 
 class DetailsPage extends StatefulWidget {
-  final String name, gender, city, state, country, email, avatar, age, phone;
+  final String name, gender, city, state, country, email, age, phone;
+  final List<String> avatar, video;
 
   const DetailsPage({
     Key? key,
@@ -14,6 +15,7 @@ class DetailsPage extends StatefulWidget {
     required this.phone,
     required this.email,
     required this.avatar,
+    required this.video,
   }) : super(key: key);
 
   @override
@@ -21,6 +23,15 @@ class DetailsPage extends StatefulWidget {
 }
 
 class _DetailsPageState extends State<DetailsPage> {
+  int currentMediaIndex = 0;
+
+  void nextMedia() {
+    setState(() {
+      int totalMediaCount = widget.avatar.length + widget.video.length;
+      currentMediaIndex = (currentMediaIndex + 1) % totalMediaCount;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -89,8 +100,8 @@ class photoDetails extends StatelessWidget {
                     padding: const EdgeInsets.all(0),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12.0),
-                      child: Image.network(
-                        widget.avatar,
+                      child: Image.asset(
+                        widget.avatar[0],
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -126,70 +137,70 @@ class buttonLikes extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
       child: Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: [
-        FloatingActionButton(
-          heroTag: 'nope',
-          backgroundColor: Colors.white,
-          onPressed: () {
-            // _matchEngine!.currentItem?.nope();
-          },
-          shape: CircleBorder(),
-          child: ShaderMask(
-            child: const Icon(
-              Icons.close,
-              color: Colors.white,
-              size: 36,
-            ),
-            shaderCallback: (Rect rect) {
-              return LinearGradient(
-                colors: [
-                  Colors.pink,
-                  Colors.red,
-                  Colors.red,
-                ],
-              ).createShader(rect);
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FloatingActionButton(
+            heroTag: 'nope',
+            backgroundColor: Colors.white,
+            onPressed: () {
+              // _matchEngine!.currentItem?.nope();
             },
-          ),
-        ),
-        // FloatingActionButton(
-        //   backgroundColor: Colors.white,
-        //   onPressed: () {
-        //     _matchEngine!.currentItem?.superLike();
-        //   },
-        // shape: CircleBorder(),
-        //   child: const Icon(
-        //     Icons.star,
-        //     color: Colors.blue,
-        //     size: 32.0,
-        //   ),
-        // ),
-        FloatingActionButton(
-          heroTag: 'like',
-          backgroundColor: Colors.white,
-          onPressed: () {
-            // _matchEngine!.currentItem?.like();
-          },
-          shape: CircleBorder(),
-          child: ShaderMask(
-            child: const Icon(
-              Icons.favorite,
-              color: Colors.white,
-              size: 36,
+            shape: CircleBorder(),
+            child: ShaderMask(
+              child: const Icon(
+                Icons.close,
+                color: Colors.white,
+                size: 36,
+              ),
+              shaderCallback: (Rect rect) {
+                return LinearGradient(
+                  colors: [
+                    Colors.pink,
+                    Colors.red,
+                    Colors.red,
+                  ],
+                ).createShader(rect);
+              },
             ),
-            shaderCallback: (Rect rect) {
-              return LinearGradient(
-                colors: [
-                  Colors.yellow,
-                  Colors.green,
-                  Colors.green,
-                ],
-              ).createShader(rect);
-            },
           ),
-        ),
-      ],
-    ),
+          // FloatingActionButton(
+          //   backgroundColor: Colors.white,
+          //   onPressed: () {
+          //     _matchEngine!.currentItem?.superLike();
+          //   },
+          // shape: CircleBorder(),
+          //   child: const Icon(
+          //     Icons.star,
+          //     color: Colors.blue,
+          //     size: 32.0,
+          //   ),
+          // ),
+          FloatingActionButton(
+            heroTag: 'like',
+            backgroundColor: Colors.white,
+            onPressed: () {
+              // _matchEngine!.currentItem?.like();
+            },
+            shape: CircleBorder(),
+            child: ShaderMask(
+              child: const Icon(
+                Icons.favorite,
+                color: Colors.white,
+                size: 36,
+              ),
+              shaderCallback: (Rect rect) {
+                return LinearGradient(
+                  colors: [
+                    Colors.yellow,
+                    Colors.green,
+                    Colors.green,
+                  ],
+                ).createShader(rect);
+              },
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
