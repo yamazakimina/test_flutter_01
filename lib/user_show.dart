@@ -107,12 +107,6 @@ class photoDetails extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  margin: const EdgeInsets.all(4.0),
-                  decoration: const BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(12.0)),
-                      color: Colors.black12),
-                ),
               ],
             ),
           ),
