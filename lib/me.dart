@@ -198,19 +198,6 @@ class contentsDetails extends StatelessWidget {
                   ],
                 ),
               ),
-              // 右側の編集ボタン
-              Padding(
-                padding: const EdgeInsets.all(16),
-                child: IconButton(
-                  icon: Icon(
-                    Icons.edit, // 編集アイコン
-                    color: Colors.grey,
-                  ),
-                  onPressed: () {
-                    // 編集ボタンの処理をここに追加
-                  },
-                ),
-              ),
             ],
           ),
         ),
