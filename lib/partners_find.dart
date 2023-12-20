@@ -658,7 +658,6 @@ class _VideoDisplayState extends State<VideoDisplay> {
           );
         });
       }).catchError((error) {
-        print('Video player initialization error: $error');
         setState(() {
           _isPlayerInitialized = false;
         });

@@ -3,12 +3,12 @@ import 'package:video_player/video_player.dart';
 import 'package:chewie/chewie.dart';
 
 // データ取得
-class UserShow extends StatefulWidget {
+class UserGraphicsShow extends StatefulWidget {
   final String name, gender, city, state, country, email, age, phone;
   final List<String> avatar, video;
   List<String> get mediaList => [...avatar, ...video];
 
-  const UserShow({
+  const UserGraphicsShow({
     Key? key,
     required this.name,
     required this.age,
@@ -23,10 +23,10 @@ class UserShow extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  _UserShowState createState() => _UserShowState();
+  _UserGraphicsShowState createState() => _UserGraphicsShowState();
 }
 
-class _UserShowState extends State<UserShow> {
+class _UserGraphicsShowState extends State<UserGraphicsShow> {
   int currentMediaIndex = 0;
   final PageController _pageController = PageController();
 
@@ -56,12 +56,12 @@ class _UserShowState extends State<UserShow> {
                 widget: widget, currentMediaIndex: currentMediaIndex),
           ),
         ),
-        // Positioned(
-        //   left: 0,
-        //   right: 0,
-        //   bottom: 16,
-        //   child: buttonLikes(),
-        // ),
+        Positioned(
+          left: 0,
+          right: 0,
+          bottom: 16,
+          child: buttonLikes(),
+        ),
       ]),
     );
   }
@@ -97,7 +97,7 @@ class photoDetails extends StatelessWidget {
     required this.currentMediaIndex,
   });
 
-  final UserShow widget;
+  final UserGraphicsShow widget;
   final int currentMediaIndex;
 
   @override
@@ -173,77 +173,84 @@ class MediaDisplay extends StatelessWidget {
       return Image.asset(mediaPath, fit: BoxFit.cover);
     } else {
       // ビデオの場合
-      return VideoDisplay(videoUrl: mediaPath);
+      final videoPlayerController = VideoPlayerController.asset(mediaPath);
+      final chewieController = ChewieController(
+        videoPlayerController: videoPlayerController,
+        autoPlay: true,
+        looping: true,
+        showControls: false,
+      );
+      return Chewie(controller: chewieController);
     }
   }
 }
 
 // ボタン：いいねとスキップ
-// class buttonLikes extends StatelessWidget {
-//   const buttonLikes({
-//     super.key,
-//   });
+class buttonLikes extends StatelessWidget {
+  const buttonLikes({
+    super.key,
+  });
 
-//   @override
-//   Widget build(BuildContext context) {
-//     return Padding(
-//       padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
-//       child: Row(
-//         mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-//         children: [
-//           FloatingActionButton(
-//             heroTag: 'nope',
-//             backgroundColor: Colors.white,
-//             onPressed: () {
-//               _matchEngine!.currentItem?.nope();
-//             },
-//             shape: CircleBorder(),
-//             child: ShaderMask(
-//               child: const Icon(
-//                 Icons.close,
-//                 color: Colors.white,
-//                 size: 36,
-//               ),
-//               shaderCallback: (Rect rect) {
-//                 return LinearGradient(
-//                   colors: [
-//                     Colors.pink,
-//                     Colors.red,
-//                     Colors.red,
-//                   ],
-//                 ).createShader(rect);
-//               },
-//             ),
-//           ),
-//           FloatingActionButton(
-//             heroTag: 'like',
-//             backgroundColor: Colors.white,
-//             onPressed: () {
-//               _matchEngine!.currentItem?.like();
-//             },
-//             shape: CircleBorder(),
-//             child: ShaderMask(
-//               child: const Icon(
-//                 Icons.favorite,
-//                 color: Colors.white,
-//                 size: 36,
-//               ),
-//               shaderCallback: (Rect rect) {
-//                 return LinearGradient(
-//                   colors: [
-//                     Colors.yellow,
-//                     Colors.green,
-//                     Colors.green,
-//                   ],
-//                 ).createShader(rect);
-//               },
-//             ),
-//           ),
-//         ],
-//       ),
-//     );
-//   }
-// }
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+        children: [
+          FloatingActionButton(
+            heroTag: 'nope',
+            backgroundColor: Colors.white,
+            onPressed: () {
+              // _matchEngine!.currentItem?.nope();
+            },
+            shape: CircleBorder(),
+            child: ShaderMask(
+              child: const Icon(
+                Icons.close,
+                color: Colors.white,
+                size: 36,
+              ),
+              shaderCallback: (Rect rect) {
+                return LinearGradient(
+                  colors: [
+                    Colors.pink,
+                    Colors.red,
+                    Colors.red,
+                  ],
+                ).createShader(rect);
+              },
+            ),
+          ),
+          FloatingActionButton(
+            heroTag: 'like',
+            backgroundColor: Colors.white,
+            onPressed: () {
+              // _matchEngine!.currentItem?.like();
+            },
+            shape: CircleBorder(),
+            child: ShaderMask(
+              child: const Icon(
+                Icons.favorite,
+                color: Colors.white,
+                size: 36,
+              ),
+              shaderCallback: (Rect rect) {
+                return LinearGradient(
+                  colors: [
+                    Colors.yellow,
+                    Colors.green,
+                    Colors.green,
+                  ],
+                ).createShader(rect);
+              },
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
 
 // プロフィール詳細
 class contentsDetails extends StatelessWidget {
@@ -320,70 +327,5 @@ class contentsDetails extends StatelessWidget {
         ),
       ),
     );
-  }
-}
-
-// ビデオの場合
-class VideoDisplay extends StatefulWidget {
-  final String videoUrl;
-
-  const VideoDisplay({Key? key, required this.videoUrl}) : super(key: key);
-
-  @override
-  _VideoDisplayState createState() => _VideoDisplayState();
-}
-
-class _VideoDisplayState extends State<VideoDisplay> {
-  late VideoPlayerController _videoController;
-  ChewieController? _chewieController;
-  bool _isPlayerInitialized = false;
-
-  @override
-  void initState() {
-    super.initState();
-    _initializeVideoPlayer();
-  }
-
-  void _initializeVideoPlayer() {
-    _videoController = VideoPlayerController.asset(widget.videoUrl)
-      ..initialize().then((_) {
-        setState(() {
-          _videoController.setVolume(0.0);
-          _isPlayerInitialized = true;
-          _chewieController = ChewieController(
-            videoPlayerController: _videoController,
-            autoPlay: true,
-            looping: true,
-            showControls: false,
-          );
-        });
-      }).catchError((error) {
-        setState(() {
-          _isPlayerInitialized = false;
-        });
-      });
-  }
-
-  @override
-  void didUpdateWidget(VideoDisplay oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (widget.videoUrl != oldWidget.videoUrl) {
-      _videoController.dispose();
-      _initializeVideoPlayer();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return _isPlayerInitialized
-        ? Chewie(controller: _chewieController!)
-        : Center(child: CircularProgressIndicator());
-  }
-
-  @override
-  void dispose() {
-    _videoController.dispose();
-    _chewieController?.dispose();
-    super.dispose();
   }
 }
